@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-
+#include "person.h"
 using namespace std;
 
 int main(){
@@ -18,12 +18,27 @@ int main(){
     // }
     // return 0;
     
-    vector<vector<string>> data2d;
+
     ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
     }
+    // old placeholder vector parsing csv
+    string headers;
+    getline(data,headers,'\n'); // 1st line
+    
+    string row_str;
+    vector<Person> people;
+    while(getline(data, row_str, '\n')){
+      Person p(row_str);
+      people.push_back(p);
+    }
+    return 0;
+}
+
+
+/* vector<vector<string>> data2d;
     string cell_str;
     string row_str;
     while(getline(data, row_str, '\n')){
@@ -43,5 +58,5 @@ int main(){
         cout << endl;
     }
     
-}
+}*/
 

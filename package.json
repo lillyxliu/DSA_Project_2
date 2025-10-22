@@ -1,0 +1,29 @@
+{
+  "name": "dsa_project_2",
+  "version": "1.0.0",
+  "description": "<H1> COP3530 - Project 2 </h1>\r This is the template for Project 2 repositories. It includes all the assignment instructions and documentation to help you use GitHub.",
+  "main": "index.js",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.15",
+    "tailwindcss": "^4.1.15"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "serve": "^14.2.5"
+  },
+  "scripts": {
+    "dev": "concurrently \"npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch\" \"serve ./src -l 5173\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lillyxliu/DSA_Project_2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lillyxliu/DSA_Project_2/issues"
+  },
+  "homepage": "https://github.com/lillyxliu/DSA_Project_2#readme"
+}
