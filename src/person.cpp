@@ -60,14 +60,18 @@ float Person::calcPersDif(const Person& other){
 
 
 
-// float Person::getSocialS() return socialS;
-// float Person::getProcessS() return processS;
-// float Person::getDecisionS() return decisionS;
-// float Person::getTactics() return tacticsS;
 
-// float Person::getHeightS() 
-// float Person::getEyeS() 
-// float Person::getHairS() 
-// float Person::getGenderS() 
-// float Person::getSkinS() 
+// 
+// We have two functions to compare our user inputed data to our dataset (completed)
+/*
 
+we need to compare every person in the dataset to our user inputed data - "Source - object" (this will come from the quiz)
+we will write the comparison, store the difference values
+when we sort these difference values, we get the scale from most to least different 
+
+- goals:
+- write heap and heap sort
+- need a data structure to store the heap
+- 
+
+*/

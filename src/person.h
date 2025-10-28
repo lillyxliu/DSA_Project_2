@@ -17,7 +17,7 @@ class Person {
         void setAttributes(); // Function to initialize attributes from inputString
         
     public:
-     
+        Person() = default; // default constructor
        Person(string input){
             // Default constructor
             this->inputString = input;
@@ -36,16 +36,20 @@ class Person {
         float calcPersDif(const Person& other);
 
         // // Getters
-        // float getSocialS() const;
-        // float getProcessS() const;
-        // float getDecisionS() const;
-        // float getTactics() const;
+        // Getters
+        string getID() { return id; }
+        string getFirstName(){return firstName;}
+        string getLasttName(){return lastName;}
+        float getSocialS() { return socialS; }
+        float getProcessS() { return processS; }
+        float getDecisionS() { return decisionS; }
+        float getTactics() { return tacticsS; }
 
-        // float getHeightS() const;
-        // float getEyeS() const;
-        // float getHairS() const;
-        // float getGenderS() const;
-        // float getSkinS() const;
+        float getHeightS() { return heightS; }
+        float getEyeS() { return eyeS; }
+        float getHairS() { return hairS; }
+        float getGenderS() { return genderS; }
+        float getSkinS() { return skinS; }
 
     
 };
