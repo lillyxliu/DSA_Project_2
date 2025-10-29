@@ -13,7 +13,7 @@
 #include "functions.h"
 using namespace std;
 
-int main(){
+int main(){ 
 
     ifstream data("../data/dataset.csv");
     if(!data.is_open()){
