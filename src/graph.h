@@ -1,6 +1,12 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include <utility>
+#include <vector>
+#include <map>
+#include <string>
+#include "person.h"
+#include <iostream>
+#pragma once
 using namespace std;
 
 // https://www.geeksforgeeks.org/cpp/implementation-of-graph-in-cpp/
@@ -9,27 +15,30 @@ class Graph{
 public: 
     struct Node{
         string id;
-        vector<pair<string,int> neighbors; // 0+ neighbors
+        vector<pair<string,int>> neighbors; // 0+ neighbors
         Node(string id_){
             id = id_;
         }
-    }
+    };
     vector<Node> nodes;
 
-    Graph();
-    Graph(int v){
-    
-        
+    Graph(){
+
+    }
+    Graph(int v){ 
+    }
+
     void addNode(string id){
-        nodes.push_back(id,{});
+        nodes.push_back(Node(id));
     }
 
-    void addEdge(int from, int to , int weight){
-        nodes[from].neighbors.push_back({to,weight});
-        nodes[to].neighbors.push_back({from,weight}); 
+    void addEdge(string from, string to , int weight){
+        int from_index = find_node_index(from);
+        int to_index = find_node_index(to);
+        nodes[from_index].neighbors.push_back({to,weight});
+        nodes[to_index].neighbors.push_back({from,weight}); 
     }
 
-    }
     int V(){
         // reutn num of vertices
         return nodes.size();
@@ -38,7 +47,7 @@ public:
         // return num of edges
         int count = 0;
         for(int i = 0; i< nodes.size();i++){
-            count += nodes[i].neighbors[i].size();
+            count += nodes[i].neighbors.size();
         }
         return count;
     }
@@ -51,7 +60,16 @@ public:
 
     // adjacency list
     map<string, vector<pair<string, int>>> neighbors;
-
+   
+    private:
+    int find_node_index(string id){
+        for(int i = 0; i< nodes.size();i++){
+            if(nodes[i].id == id){
+                return i;
+            }
+        }
+        return -1; 
+    }  
 };
 
 

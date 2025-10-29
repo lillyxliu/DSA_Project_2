@@ -5,6 +5,7 @@ using namespace std;
 #include <vector>
 #include <string>
 #include "person.h"
+#pragma once
 
 //#include "main.cpp"
 

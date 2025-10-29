@@ -6,9 +6,7 @@ using namespace std;
 #include "dataStructureOne.h"
 #include "person.h"
 #include <algorithm>
-
-
-
+#include "functions.h"
 
 
 void heapify(vector<string>& vector_id, Person& p_source, int n, int i , map<string,Person>& a_map, int type){
