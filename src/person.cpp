@@ -44,8 +44,8 @@ void Person::setAttributes(){
 float Person::calcPhysicalDif(const Person& other){
     float physicalDiff = 0.0;
     physicalDiff = abs(heightS - other.heightS) +
-    abs(eyeS - other.eyeS); abs(hairS - other.hairS) +
-    abs(genderS - other.genderS) + abs(skinS - other.skinS);
+    abs(eyeS - other.eyeS); abs(hairS - other.hairS)  + abs(skinS - other.skinS);
+    // gendrS difference excluded
     return physicalDiff;
 };
 
