@@ -34,6 +34,8 @@ class Person {
         
         float calcPhysicalDif(const Person& other);
         float calcPersDif(const Person& other);
+        float calcPhysicalDif_euclidean(const Person& other);
+        float calcPersDif_euclidean(const Person& other);
 
         // // Getters
         // Getters

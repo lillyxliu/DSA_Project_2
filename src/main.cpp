@@ -7,15 +7,17 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <cfloat>  
 #include "person.h"
 #include "dataStructureOne.h"
 #include "dataStructureTwo.h"
 #include "graph.h"
 #include "functions.h"
-using namespace std;
+
 #include "crow.h"
 #include "crow/middlewares/cors.h"
 
+using namespace std;
 
 
 int main(){ 
@@ -98,6 +100,23 @@ int main(){
 
     cout << "Crow server running on http://localhost:8080/graph" << endl;
     app.port(8080).multithreaded().run();
+
+    // Calc Graph Implementaion
+    Graph calc_graph;
+    for(int i =0; i< vector_id.size();i++){
+        for(int j = i+1; j< vector_id.size(); j++){
+            Person& person_one = a_map[vector_id[i]];
+            Person& person_two = a_map[vector_id[j]];   
+
+            float weight_perosnality_eculidean = person_one.calcPersDif_euclidean(person_two);
+            float weight_physical_eculidean = person_one.calcPhysicalDif_euclidean(person_two);
+            float total_weight = (weight_perosnality_eculidean + weight_physical_eculidean)/2.0;
+
+        
+            calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
+
+        }
+    }
 
     return 0;
 }

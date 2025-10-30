@@ -6,9 +6,11 @@
 #include <map>
 #include <string>
 #include "person.h"
-#include <iostream>
+#include <cmath>
+#include <cfloat>
+#include "crow/crow.h"
+
 using namespace std;
-#include "crow.h"
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
 // https://www.npmjs.com/package/react-force-graph
