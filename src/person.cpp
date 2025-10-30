@@ -38,7 +38,7 @@ void Person::setAttributes(){
     decisionS = stof(tokens[10]);
     tacticsS = stof(tokens[11]);
 
-    cout << firstName << " " << lastName << endl;
+   // cout << firstName << " " << lastName << endl;
 }
 
 float Person::calcPhysicalDif(const Person& other){

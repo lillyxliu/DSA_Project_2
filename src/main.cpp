@@ -18,7 +18,7 @@ using namespace std;
 
 int main(){ 
     
-    ifstream data("../data/dataset.csv");
+    ifstream data("../data/LargerDataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
@@ -49,17 +49,19 @@ int main(){
     // quickSort(vector_id_physical, 0, vector_id_physical.size() - 1, source_p, a_map, 1); // by physical
 
 
-    // print vector print
-    for(int i =0 ; i<vector_id.size();i++){
-        cout << a_map[vector_id_personality[i]].getFirstName() << " "; 
+    // // print vector print
+    // for(int i =0 ; i<vector_id.size();i++){
+    //     cout << a_map[vector_id_personality[i]].getFirstName() << " "; 
         
-    }
-    cout << endl;
-    for(int i =0 ; i<vector_id.size();i++){
-        cout << a_map[vector_id_physical[i]].getFirstName() << " "; 
+    // }
+    // cout << endl;
+    // for(int i =0 ; i<vector_id.size();i++){
+    //     cout << a_map[vector_id_physical[i]].getFirstName() << " "; 
         
-    }
-    cout << endl;
+    // }
+    // cout << endl;
+
+    cout << "Loaded " << a_map.size() << " people." << endl;
 
 
     /// testing graph
@@ -72,7 +74,9 @@ int main(){
     cout << "Testing Graph Implementation" << endl;
     g.printGraph();
 
-/// Calc Graph Implementaion
+    cout << "Reached graph calculation" << endl;
+
+//Calc Graph Implementaion
     Graph calc_graph;
     for(int i =0; i< vector_id.size();i++){
         for(int j = i+1; j< vector_id.size(); j++){
@@ -89,7 +93,7 @@ int main(){
         }
     }
     cout << "Calculated Graph Implementation" << endl;
-    calc_graph.printGraph(a_map);
+    // calc_graph.printGraph(a_map);
 
 
     return 0;
