@@ -10,6 +10,7 @@
 #include "person.h"
 #include "dataStructureOne.h"
 #include "dataStructureTwo.h"
+#include "graph.h"
 #include "functions.h"
 using namespace std;
 
@@ -52,7 +53,26 @@ cout << endl;
         cout << lookupMap[vector_id_physical[i]].getFirstName() << " "; 
         
     }
-    return 0;
 
-    
+
+    /// testing graph
+    cout << "Testing Graph Implementation" << endl << endl; 
+    Graph g;
+    g.add_edge("Anny", "Bobby", 5);
+    g.add_edge("Anny", "Cathy", 3);
+    g.add_edge("Bobby", "Cathy", 2);
+    g.add_edge("Cathy", "David", 4);
+    g.printGraph();
+
+    cout << "Vertices: " << g.vertex_count() << endl;
+    cout << "Edges: " << g.edge_count() << endl;
+    cout << "Is Edge between Anny and Bobby: " << g.isEdge(0, 1) << endl;
+    cout << "Weight Anny-Bobby" << g.getWeight(0, 1) << endl;
+    vector<int> adj = g.getAdjacent("Cathy");
+    cout << "Adjacent to Cathy: ";
+    for(int index : adj){
+        cout << g.nodes[index].id << " ";
+    }
+    cout << endl;
+    return 0;
 }

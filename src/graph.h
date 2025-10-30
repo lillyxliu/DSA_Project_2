@@ -108,12 +108,16 @@ public:
         }
     }
     
-    void printGraph();
-
+    void printGraph(){
+        for(auto node: nodes){
+            for(auto neighbor: node.neighbors){
+                cout << node.id << ": " << neighbor.first << "; weight: " << neighbor.second << ";" << endl;
+            }
+        }
+    }
     // adjacency list
     map<string, vector<pair<string, int>>> neighbors;
    
-    private:
     int find_node_index(string id){
         for(int i = 0; i< nodes.size();i++){
             if(nodes[i].id == id){
