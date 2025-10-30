@@ -13,6 +13,8 @@
 #include "dataStructureTwo.h"
 #include "graph.h"
 #include "functions.h"
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 
 
@@ -42,11 +44,33 @@ int main(){
     Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
     vector<string> vector_id_personality = vector_id;
     vector<string> vector_id_physical = vector_id;
-    heapSort(vector_id_personality,source_p, a_map, 0); // by personality
-    heapSort(vector_id_physical,source_p, a_map, 1); // by physical
+
+
     
-    // quickSort(vector_id_personality, 0, vector_id_personality.size() - 1, source_p, a_map, 0); // by personality
-    // quickSort(vector_id_physical, 0, vector_id_physical.size() - 1, source_p, a_map, 1); // by physical
+    auto start_heap_personality = high_resolution_clock::now();
+    heapSort(vector_id_personality,source_p, a_map, 0); // by personality
+    auto end_heap_personality = high_resolution_clock::now();
+
+    auto start_heap_physical = high_resolution_clock::now();
+    heapSort(vector_id_physical,source_p, a_map, 1); // by physical
+    auto end_heap_physical = high_resolution_clock::now();
+
+
+    auto heap_duration = duration_cast<microseconds>(end_heap_personality - start_heap_personality + end_heap_physical - start_heap_physical  );
+    cout << "heapSort took " << heap_duration.count() << " microseconds." << endl;
+
+
+    auto start_quick_personality = high_resolution_clock::now();
+    quickSort(vector_id_personality, 0, vector_id_personality.size() - 1, source_p, a_map, 0); // by personality
+    auto end_quick_personality = high_resolution_clock::now();
+
+    auto start_quick_physical = high_resolution_clock::now();
+    quickSort(vector_id_physical, 0, vector_id_physical.size() - 1, source_p, a_map, 1); // by physical
+    auto end_quick_physical = high_resolution_clock::now(); 
+
+    
+    auto quick_duration = duration_cast<microseconds>(end_quick_personality - start_quick_personality + end_quick_physical - start_quick_physical  );    
+    cout << "quickSort took " << quick_duration.count() << " microseconds." << endl;
 
 
     // print vector print
