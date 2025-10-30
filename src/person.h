@@ -51,6 +51,22 @@ class Person {
         float getGenderS() { return genderS; }
         float getSkinS() { return skinS; }
 
+        //Setters
+        void setID(string idIn) {  id = idIn; }
+        void setFirstName(string firstNameIn){firstName = firstNameIn;}
+        void setLasttName(string lastNameIn){lastName = lastNameIn;}
+        void setSocialS(float socialIn) { socialS = socialIn; }
+        void setProcessS(float processIn) { processS = processIn;}
+        void setDecisionS(float decisionsIn) { decisionS = decisionsIn; }
+        void setTactics(float tacticsIn) { tacticsS = tacticsIn;}
+
+
+        void setHeightS(float heightIn) { heightS = heightIn; }
+        void setEyeS(float eyesIn) { eyeS = eyesIn; }
+        void setHairS(float hairIn) { hairS = hairIn;}
+        void setGenderS(float genderIn) { genderS = genderIn;}
+        void setSkinS(float skinIn) { skinS = skinIn; }
+
     
 };
 
