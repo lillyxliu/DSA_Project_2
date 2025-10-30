@@ -25,12 +25,12 @@ int main(){
     getline(data,headers,'\n'); // 1st line
     
     string row_str;
-    map<string, Person> lookupMap;
+    map<string, Person> a_map;
     vector<string> vector_id;
     
     while(getline(data, row_str, '\n')){
       Person p(row_str);
-      lookupMap.insert({p.getID(),p});
+      a_map.insert({p.getID(),p});
       vector_id.push_back(p.getID());
       
     }
@@ -40,17 +40,21 @@ int main(){
     Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
     vector<string> vector_id_personality = vector_id;
     vector<string> vector_id_physical = vector_id;
-    heapSort(vector_id_personality,source_p, lookupMap, 0); // by personality
-    heapSort(vector_id_physical,source_p, lookupMap, 1); // by physical
+    heapSort(vector_id_personality,source_p, a_map, 0); // by personality
+    heapSort(vector_id_physical,source_p, a_map, 1); // by physical
     
+    // quickSort(vector_id_personality, 0, vector_id_personality.size() - 1, source_p, a_map, 0); // by personality
+    // quickSort(vector_id_physical, 0, vector_id_physical.size() - 1, source_p, a_map, 1); // by physical
+
+
     // print vector print
     for(int i =0 ; i<vector_id.size();i++){
-        cout << lookupMap[vector_id_personality[i]].getFirstName() << " "; 
+        cout << a_map[vector_id_personality[i]].getFirstName() << " "; 
         
     }
 cout << endl;
     for(int i =0 ; i<vector_id.size();i++){
-        cout << lookupMap[vector_id_physical[i]].getFirstName() << " "; 
+        cout << a_map[vector_id_physical[i]].getFirstName() << " "; 
         
     }
 

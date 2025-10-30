@@ -25,11 +25,11 @@ int partition(vector<string>& vector_id, int low, int high, Person& source_p, ma
 
 
     while (up < down) {
-        while (up < high && id_to_value_type(vector_id[up], source_p, a_map, type) >= pivot_value)
+        while (up < high && id_to_value_type(vector_id[up], source_p, a_map, type) <= pivot_value)
             up++;
 
 
-        while (id_to_value_type(vector_id[down], source_p, a_map, type) < pivot_value)
+        while (id_to_value_type(vector_id[down], source_p, a_map, type) > pivot_value)
             down--;
 
 
