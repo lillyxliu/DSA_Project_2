@@ -44,7 +44,7 @@ void Person::setAttributes(){
 float Person::calcPhysicalDif(const Person& other){
     float physicalDiff = 0.0;
     physicalDiff = abs(heightS - other.heightS) +
-    abs(eyeS - other.eyeS); abs(hairS - other.hairS)  + abs(skinS - other.skinS);
+    abs(eyeS - other.eyeS) + abs(hairS - other.hairS)  + abs(skinS - other.skinS);
     // gendrS difference excluded
     return physicalDiff;
 };
@@ -55,6 +55,24 @@ float Person::calcPersDif(const Person& other){
     abs(decisionS - other.decisionS) + abs(tacticsS - other.tacticsS);
     return persDiff;
 };
+
+float Person::calcPhysicalDif_euclidean(const Person& other){
+    float physicalDiff = 0.0;
+    physicalDiff = pow(heightS - other.heightS,2) + pow(eyeS - other.eyeS,2) +
+    pow(hairS - other.hairS,2) + pow(skinS- other.skinS,2);
+    // gendrS difference excluded
+    physicalDiff = (physicalDiff);
+    return physicalDiff;
+};
+
+float Person::calcPersDif_euclidean(const Person& other){
+    float persDiff = 0.0;
+    persDiff = pow(socialS - other.socialS,2) + pow(processS - other.processS,2) +
+    pow(decisionS - other.decisionS,2) + pow(tacticsS - other.tacticsS,2);
+    persDiff = sqrt(persDiff); 
+    return persDiff;
+};
+
 
 
 
