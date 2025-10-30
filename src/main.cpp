@@ -13,8 +13,13 @@
 #include "graph.h"
 #include "functions.h"
 using namespace std;
+#include "crow.h"
+#include "crow/middlewares/cors.h"
+
+
 
 int main(){ 
+    
 
     ifstream data("../data/dataset.csv");
     if(!data.is_open()){
@@ -52,31 +57,47 @@ int main(){
         cout << a_map[vector_id_personality[i]].getFirstName() << " "; 
         
     }
-cout << endl;
+    cout << endl;
     for(int i =0 ; i<vector_id.size();i++){
         cout << a_map[vector_id_physical[i]].getFirstName() << " "; 
         
     }
+    cout << endl;
 
 
     /// testing graph
-    cout << "Testing Graph Implementation" << endl << endl; 
     Graph g;
     g.add_edge("Anny", "Bobby", 5);
     g.add_edge("Anny", "Cathy", 3);
     g.add_edge("Bobby", "Cathy", 2);
     g.add_edge("Cathy", "David", 4);
+
+    cout << "Testing Graph Implementation" << endl;
     g.printGraph();
 
-    cout << "Vertices: " << g.vertex_count() << endl;
-    cout << "Edges: " << g.edge_count() << endl;
-    cout << "Is Edge between Anny and Bobby: " << g.isEdge(0, 1) << endl;
-    cout << "Weight Anny-Bobby" << g.getWeight(0, 1) << endl;
-    vector<int> adj = g.getAdjacent("Cathy");
-    cout << "Adjacent to Cathy: ";
-    for(int index : adj){
-        cout << g.nodes[index].id << " ";
-    }
-    cout << endl;
+    // Start crow server last
+    crow::App<crow::CORSHandler> app;
+    auto &cors = app.get_middleware<crow::CORSHandler>();
+    cors.global().origin("*").headers("*").ignore();
+
+
+    CROW_ROUTE(app, "/ping")([]() {
+    return "pong";
+    });
+
+
+    CROW_ROUTE(app, "/graph").methods("GET"_method)([&]() {
+    auto json = g.to_json();
+    crow::response res(json);
+    res.add_header("Access-Control-Allow-Origin", "*");
+    res.add_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.add_header("Access-Control-Allow-Headers", "Content-Type");
+    return res;
+    });
+
+
+    cout << "Crow server running on http://localhost:8080/graph" << endl;
+    app.port(8080).multithreaded().run();
+
     return 0;
 }

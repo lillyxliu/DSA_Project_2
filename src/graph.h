@@ -8,7 +8,10 @@
 #include "person.h"
 #include <iostream>
 using namespace std;
+#include "crow.h"
 
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
+// https://www.npmjs.com/package/react-force-graph
 // https://www.geeksforgeeks.org/cpp/implementation-of-graph-in-cpp/
 // Slides: page 55 adjency list, page 58 one graph api
 class Graph{
@@ -77,6 +80,7 @@ public:
                 return true;
             }
         }
+        return false;
 
     }
 
@@ -106,6 +110,7 @@ public:
             /// pushes back the node index of the neighbor found id
             adjacent_indices.push_back(find_node_index(neighbor.first));
         }
+        return adjacent_indices;
     }
     
     void printGraph(){
@@ -125,7 +130,28 @@ public:
             }
         }
         return -1; 
-    }  
+    } 
+    
+    crow::json::wvalue to_json() {
+        crow::json::wvalue result;
+        vector<crow::json::wvalue> nodes_json;
+        vector<crow::json::wvalue> edges_json;
+
+        for (auto &node : nodes) {
+            nodes_json.push_back(crow::json::wvalue{{"id", node.id}});
+            for (auto &neighbor : node.neighbors) {
+                edges_json.push_back(crow::json::wvalue{
+                    {"source", node.id},
+                    {"target", neighbor.first},
+                    {"weight", neighbor.second}
+                });
+            }
+        }
+
+        result["nodes"] = std::move(nodes_json);
+        result["edges"] = std::move(edges_json);
+        return result;
+    }
 };
 
 
