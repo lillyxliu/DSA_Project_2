@@ -61,7 +61,7 @@ float Person::calcPhysicalDif_euclidean(const Person& other){
     physicalDiff = pow(heightS - other.heightS,2) + pow(eyeS - other.eyeS,2) +
     pow(hairS - other.hairS,2) + pow(skinS- other.skinS,2);
     // gendrS difference excluded
-    physicalDiff = (physicalDiff);
+    physicalDiff = sqrt(physicalDiff);
     return physicalDiff;
 };
 

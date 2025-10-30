@@ -18,7 +18,6 @@ using namespace std;
 
 int main(){ 
     
-
     ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
@@ -86,9 +85,12 @@ int main(){
 
         
             calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
-
+            calc_graph.add_edge(person_two.getID(), person_one.getID(), total_weight);
         }
     }
+    cout << "Calculated Graph Implementation" << endl;
+    calc_graph.printGraph(a_map);
+
 
     return 0;
 }

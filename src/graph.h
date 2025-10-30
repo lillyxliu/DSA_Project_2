@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 #include "person.h"
-
+#include "functions.h"
 using namespace std;
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
@@ -17,7 +17,7 @@ class Graph{
 public: 
     struct Node{
         string id;
-        vector<pair<string,int>> neighbors; // string: id int: weight
+        vector<pair<string,float>> neighbors; // string: id int: weight
         Node(string id_){
             id = id_;
         }
@@ -39,7 +39,7 @@ public:
         // else: do nothing since node already exists
     }
 
-    void add_edge(string from, string to , int weight){
+    void add_edge(string from, string to , float weight){
         // if a node for an id not exist, add node
         // if it already exists, this does nothing
         add_node(from);
@@ -111,7 +111,6 @@ public:
         }
         return adjacent_indices;
     }
-    
     void printGraph(){
         for(auto node: nodes){
             for(auto neighbor: node.neighbors){
@@ -119,6 +118,20 @@ public:
             }
         }
     }
+
+    void printGraph(map<string,Person>& a_map){
+        for(auto node: nodes){
+            cout << endl << "[" << a_map[node.id].getFirstName() << "]: " ;
+            for(auto neighbor: node.neighbors){
+                cout << a_map[neighbor.first].getFirstName() << "(" << neighbor.second << ")";
+                if( neighbor.first != node.neighbors.back().first){
+                    cout << ", ";
+                }
+            }
+            cout << endl;
+        }
+    }
+     
     // adjacency list
     map<string, vector<pair<string, int>>> neighbors;
    
