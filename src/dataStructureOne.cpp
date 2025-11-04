@@ -28,7 +28,7 @@ void heapify(vector<string>& vector_id, Person& p_source, int n, int i , map<str
 
 
     if (l <n) {
-        float left_value = id_to_value_type(vector_id[l], p_source, a_map,type);
+        float left_value = id_to_value_type(vector_id[l], p_source, a_map, type);
         if(left_value > smallest_value){
             smallest = l;
             smallest_value = left_value;

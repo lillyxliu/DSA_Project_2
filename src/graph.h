@@ -40,6 +40,9 @@ public:
     }
 
     void add_edge(string from, string to , float weight){
+        if(to == from){
+            return; // don't create edges for identical nodes
+        }
         // if a node for an id not exist, add node
         // if it already exists, this does nothing
         add_node(from);
@@ -48,6 +51,13 @@ public:
         // find the index of the new nodes from the id
         int from_index = find_node_index(from);
         int to_index = find_node_index(to);
+
+        // no duplicate edges:
+        for(auto neighbor: nodes[from_index].neighbors){
+            if(neighbor.first == to){
+                return; // edge already exists
+            }
+        }
 
         // add edge to adjacency list
         nodes[from_index].neighbors.push_back({to,weight});
