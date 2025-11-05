@@ -46,10 +46,37 @@ void Questions::getValues() {
         dataPoint.flipped = false;
       }
 
-      cout << "Question: " << dataPoint.question << ", Category: " << dataPoint.category << ", Flipped?: " << dataPoint.flipped << endl;
-      
-    }
-    
+      // cout << "Question: " << dataPoint.question << ", Category: " << dataPoint.category << ", Flipped?: " << dataPoint.flipped << endl;
 
+      cout << "Question: " << dataPoint.question << endl;
+      int userinput;
+      int result;
+      cin >> userinput;
+
+      if(userinput == 1){
+          result -= 2;
+      } else if(userinput == 2){
+          result -= 1;
+      } else if(userinput == 4){
+          result += 1;
+      } else if(userinput ==5){
+          result +=2;
+          
+
+      
+  
+    }
+    if(result > 0){
+          cout << "You are " << dataPoint.yesIndicates << endl;
+      } else if(result < 0 ){
+          cout << "You are " << dataPoint.noIndicates << endl;
+      }else {
+          cout << "Invalid input. Please enter a valid number from 1-5." << endl;
+
+    }
+  }
 }
 
+
+
+  
