@@ -80,12 +80,25 @@ public:
 
     bool isEdge(int from, int to){
         // get index of from node's id
+        if(from< 0 || to <0 ){
+            return false;
+        }
+        if(from >= nodes.size() || to >= nodes.size()){
+            return false;
+        }
+
+
         int from_index = find_node_index(nodes[from].id);
         int to_index = find_node_index(nodes[to].id);
 
-        for(int i = 0; i<nodes[from_index].neighbors.size();i++){
-            // checks if the id of node's neighbor's at i index matches node's at 2nd index's actual id
-            if(nodes[from_index].neighbors[i].first == nodes[to_index].id){
+        if(from_index == -1 || to_index == -1){
+            return false; // one of the nodes does not exist
+        }
+
+        //for(int i = 0; i<nodes[from_index].neighbors.size();i++){
+        for(auto neighbor: nodes[from_index].neighbors){ // checking from neighor to neighbors  
+        // checks if the id of node's neighbor's at i index matches node's at 2nd index's actual id
+            if(neighbor.first == nodes[to_index].id){
                 return true;
             }
         }

@@ -29,7 +29,8 @@ auto measure_time(T funct){
 
 int main(){ 
     
-    ifstream data("../data/LargerDataset.csv");
+   ifstream data("../data/LargerDataset.csv");
+   // ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
@@ -47,7 +48,8 @@ int main(){
       vector_id.push_back(p.getID());
       
     }
-    
+    getline(data, row_str, '\n');
+    cout << "Last line read: " << row_str << endl;
     //Person source_p("Halia,Ahny,00000008,0.87,0.30,0.36,0.4,0.28,0.70,0.62,0.33,0.64");
     //Person source_p("Ana,Chatter,00000009,0.81,0.99,0.99,0.00,0.61,0.98,0.82,0.61,0.31");
     Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
@@ -104,7 +106,7 @@ int main(){
     /////////////////////////////////////////////////////
 
     cout << "Loaded " << a_map.size() << " people." << endl;
-
+    cout << "Loaded_vector" << vector_id.size() << " people." << endl;
 /*
     // /// testing graph
     // Graph g;
@@ -118,47 +120,48 @@ int main(){
 */
     cout << "Reached graph calculation" << endl;
 
-    // int connections_max = 10;
-    // //Calc Graph Implementaion
-    // Graph calc_graph;
-    // for(int i =0; i< vector_id.size();i++){
-    //     Person& person_one = a_map[vector_id[i]]; // create a copy of person one
-    //   //  vector<pair<string,float>> similar_neighbors; // to store potential neighbors and their weights
-    //     vector<string> ids_copy = vector_id; // copy of vector_id to modify
+    int connections_max = 3;
+    //Calc Graph Implementaion
+    Graph calc_graph;
+    for(int i =0; i< vector_id.size();i++){
+        Person& person_one = a_map[vector_id[i]]; // create a copy of person one
+      //  vector<pair<string,float>> similar_neighbors; // to store potential neighbors and their weights
+        vector<string> ids_copy = vector_id; // copy of vector_id to modify
 
-    //     heapSort(ids_copy, person_one, a_map, 3); // sort by total weight
+        heapSort(ids_copy, person_one, a_map, 3); // sort by total weight
 
-    //     int neighbors_added = 0;
+        int neighbors_added = 0;
 
-    //     for(int j = 0; j< ids_copy.size(); j++){
-    //         if(person_one.getID()== ids_copy[j]) continue; // if index of same person, skip
+        for(int j = 0; j< ids_copy.size(); j++){
+            if(person_one.getID()== ids_copy[j]) continue; // if index of same person, skip
 
-    //         Person& person_two = a_map[ids_copy[j]];    // create a copy of person two
+            Person& person_two = a_map[ids_copy[j]];    // create a copy of person two
 
-    //         float weight_personality_euclidean = person_one.calcPersDif_euclidean(person_two); // calculate personality weight
-    //         float weight_physical_eculidean = person_one.calcPhysicalDif_euclidean(person_two); // calculate physical weight
+            float weight_personality_euclidean = person_one.calcPersDif_euclidean(person_two); // calculate personality weight
+            float weight_physical_euclidean = person_one.calcPhysicalDif_euclidean(person_two); // calculate physical weight
           
-    //         float total_weight = (weight_personality_euclidean + weight_personality_euclidean)/2.0f; // average weight
+            float total_weight = (weight_personality_euclidean + weight_physical_euclidean)/2.0f; // average weight
 
-    //       //  similar_neighbors.push_back({person_two.getID(), total_weight});    // push back the id and weight of neighbors
+          //  similar_neighbors.push_back({person_two.getID(), total_weight});    // push back the id and weight of neighbors
             
-    //       if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
-    //                            calc_graph.find_node_index(person_two.getID()))){
-    //             continue; // skip if edge already exists
-    //         }
+          if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
+                               calc_graph.find_node_index(person_two.getID()))){
+                continue; // skip if edge already exists
+            }
 
-    //         calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
-    //         neighbors_added++;
+            calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
+            neighbors_added++;
             
-    //         if(neighbors_added >= connections_max){
-    //             break; // if number of neighbors added reaches max allowed, stop so only top n neighbors connected
-    //         }
-    //     }
-    // }
+            if(neighbors_added >= connections_max){
+                cout << "break!" << endl;
+                break; // if number of neighbors added reaches max allowed, stop so only top n neighbors connected
+            }
+        }
+    }
 
 
-    // cout << "Calculated Graph Implementation" << endl;
-    // //calc_graph.printGraph(a_map);
+    cout << "Calculated Graph Implementation" << endl;
+    //calc_graph.printGraph(a_map);
 
 
     return 0;

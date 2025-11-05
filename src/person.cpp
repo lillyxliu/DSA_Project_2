@@ -27,7 +27,7 @@ void Person::setAttributes(){
     */
     firstName = tokens[0];
     lastName = tokens[1];
-    id = stoi(tokens[2]);
+    id = tokens[2];
     heightS = stof(tokens[3]);
     eyeS = stof(tokens[4]);
     hairS = stof(tokens[5]);
