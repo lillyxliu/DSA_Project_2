@@ -75,21 +75,3 @@ float Person::calcPersDif_euclidean(const Person& other){
 
 
 
-
-
-
-
-// 
-// We have two functions to compare our user inputed data to our dataset (completed)
-/*
-
-we need to compare every person in the dataset to our user inputed data - "Source - object" (this will come from the quiz)
-we will write the comparison, store the difference values
-when we sort these difference values, we get the scale from most to least different 
-
-- goals:
-- write heap and heap sort
-- need a data structure to store the heap
-- 
-
-*/

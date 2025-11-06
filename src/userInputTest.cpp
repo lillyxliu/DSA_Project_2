@@ -133,30 +133,28 @@ void Questions::convertPersonalityScale(){
 
 
 void Questions::getPhysicalValues() {
-    // Placeholder for physical questions implementation
-    //read from csv file and populate 2d_vector
     ifstream data("../data/QuestionsPhysical.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return;
     }
     string headers;
-    getline(data, headers,'"'); // 1st line
+    getline(data, headers); // 1st line
     
-    string row_str;
-    
-    while(getline(data, row_str, '\n')){
-      stringstream ss(row_str);
-      string gender, height, eyes, race;
-    
-      getline(ss, gender, '"');
-      getline(ss, height, '"');
-      getline(ss, eyes, '"');   
-      getline(ss, race, '"');
+    string line;
+    while(getline(data, line)){
       
-      cout << gender << endl;
+      if (line.empty()) continue; 
 
-      //NEED TO FINISH PARSING
-
+    if(line.front() == '"') {
+        line.erase(0, 1);
     }
+    if(!line.empty() && line.back() == '"') {
+        line.pop_back();  
+    }  
+    physicalBank.push_back(line);
+    }
+   cout << physicalBank[0] << physicalBank[1] << physicalBank[2] << physicalBank[3] << endl << physicalBank[4] << endl;
+
+        
 }
