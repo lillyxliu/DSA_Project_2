@@ -14,6 +14,13 @@ Person user;
 questionData dataPoint;
 Questions questionsObj;
 
+
+void Questions::runTest(){
+    getValues();
+    askQuestions();
+    calculatePersonality();
+}
+
 void Questions::getValues() {
     //read from csv file and populate 2d_vector
     ifstream data("../data/Questions.csv");
@@ -46,37 +53,72 @@ void Questions::getValues() {
         dataPoint.flipped = false;
       }
 
-      // cout << "Question: " << dataPoint.question << ", Category: " << dataPoint.category << ", Flipped?: " << dataPoint.flipped << endl;
+      bank.push_back(dataPoint);
 
-      cout << "Question: " << dataPoint.question << endl;
-      int userinput;
-      int result;
-      cin >> userinput;
 
-      if(userinput == 1){
-          result -= 2;
-      } else if(userinput == 2){
-          result -= 1;
-      } else if(userinput == 4){
-          result += 1;
-      } else if(userinput ==5){
-          result +=2;
-          
-
-      
+}
   
-    }
-    if(result > 0){
-          cout << "You are " << dataPoint.yesIndicates << endl;
-      } else if(result < 0 ){
-          cout << "You are " << dataPoint.noIndicates << endl;
-      }else {
-          cout << "Invalid input. Please enter a valid number from 1-5." << endl;
+}
 
+void Questions::updateScore(string& category, int answer, bool flipped) {
+    if (flipped) {
+        answer = 6 - answer;
     }
-  }
+    int value = answer - 3; // Normalize to -2 to +2 scale
+
+    if (category == "Social") {
+        setSocialScore(getSocialScore() + value);
+    } else if (category == "Processing") {
+        setProcessingScore(getProcessingScore() + value);
+    } else if (category == "Decision") {
+        setDecisionScore(getDecisionScore() + value);
+    } else if (category == "Tactics") {
+        setTacticsScore(getTacticsScore() + value);
+    }
 }
 
 
 
-  
+void Questions::askQuestions(){
+
+  cout << "We will now begin the questionnaire. Please answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
+
+  for (int i = 0; i < bank.size(); i++){
+    cout << i + 1 << ". " << bank[i].question << ": ";
+    cin >> bank[i].answer;
+
+    updateScore(bank[i].category, bank[i].answer, bank[i].flipped);
+    
+    // FOR TESTING
+    // if(bank[i].flipped) cout << "(This question is flipped)" << endl;
+    // cout << "You answered: " << bank[i].answer << endl;
+   
+    // cout << bank[i].category << " score is now: ";
+   
+    // if (bank[i].category == "Social" && socialScore != 0) {
+    //     cout << getSocialScore() << endl;
+    // } else if (bank[i].category == "Processing" && processingScore != 0) {
+    //     cout << getProcessingScore() << endl;
+    // } else if (bank[i].category == "Decision" && decisionScore != 0) {
+    //     cout << getDecisionScore() << endl;
+    // } else if (bank[i].category == "Tactics" && tacticsScore != 0) {
+    //     cout << getTacticsScore() << endl;
+    // } else { cout << "0" << endl; }
+    // cout << endl;
+  }
+}
+
+
+void Questions::calculatePersonality(){
+    string personalityType = "";
+
+    cout << socialScore << " " << processingScore << " " << decisionScore << " " << tacticsScore << endl;
+
+
+    personalityType += (getSocialScore() >= 0) ? "E" : "I";
+    personalityType += (getProcessingScore() >= 0) ? "N" : "S";
+    personalityType += (getDecisionScore() >= 0) ? "T" : "F";
+    personalityType += (getTacticsScore() >= 0) ? "P" : "J";
+
+    cout << "Your personality type is: " << personalityType << endl;
+}

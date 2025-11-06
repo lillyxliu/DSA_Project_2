@@ -138,7 +138,7 @@ Y
 
 //             Person& person_two = a_map[ids_copy[j]];    // create a copy of person two
 
-//             float weight_personality_euclidean = person_one.calcPersDif_euclidean(person_two); // calculate personality weight
+//             float weight_personality_euclidean = person_one.calcPersDif_euclidean(pers2on_two); // calculate personality weight
 //             float weight_physical_euclidean = person_one.calcPhysicalDif_euclidean(person_two); // calculate physical weight
           
 //             float total_weight = (weight_personality_euclidean + weight_physical_euclidean)/2.0f; // average weight
@@ -167,6 +167,6 @@ Y
 
 //     return 0;
 Questions qst;
-qst.getValues();
+qst.runTest();
 
 }
