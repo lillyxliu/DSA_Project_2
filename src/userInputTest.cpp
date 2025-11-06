@@ -154,7 +154,44 @@ void Questions::getPhysicalValues() {
     }  
     physicalBank.push_back(line);
     }
-   cout << physicalBank[0] << physicalBank[1] << physicalBank[2] << physicalBank[3] << endl << physicalBank[4] << endl;
+   for (int i = 0; i < physicalBank.size(); i++) {
+        cout << "Question " << i + 1 << endl;
 
+        string q = physicalBank[i];
         
+        // find where options start " a)"
+        size_t pos = q.find(" a)");
+        if (pos != string::npos) {
+            //printing question
+            cout << q.substr(0, pos) << endl;
+
+            // extract the rest of the string (the options)
+            string options = q.substr(pos + 1); //  skips the initial space before 'a)'
+            
+
+            // split by patterns like "a)" "b)" "c)"
+            char current_label = 'a';
+            while (true){
+                string label = string(1, current_label) + ")";
+                size_t start = options.find(label);
+                if (start == string::npos){ 
+                break;
+                }
+
+                size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
+                string choice;
+                if (next == string::npos)
+                    choice = options.substr(start + 2);
+                else
+                    choice = options.substr(start + 2, next - (start + 2));
+
+                cout << "  " << label << " " << choice << endl;
+                current_label++;
+            }
+        } else {
+            cout << q << endl;
+        }
+
+        cout << endl;
+    }  
 }
