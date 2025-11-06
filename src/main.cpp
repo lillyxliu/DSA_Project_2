@@ -30,7 +30,7 @@ auto measure_time(T funct){
 
 int main(){ 
     
-   ifstream data("../data/LargerDataset.csv");
+   ifstream data("../data/dataset.csv");
    // ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;

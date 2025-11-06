@@ -10,7 +10,7 @@
 using namespace std;
 
 
-struct questionData
+struct personQuestionData
 {
     string question;
     string category;
@@ -23,13 +23,23 @@ struct questionData
     /* data */
 };
 
+
+
 class Questions{
     public: 
         void runTest();
-        void askQuestions();
-        void getValues();
+
+        // PERSONALITY FUNCTIONS
+        void askPersonalityQuestions();
+        void getPersonalityValues();
         void updateScore(string& category, int answer, bool flipped);
         void calculatePersonality();
+        void convertPersonalityScale();
+
+        // PHYSICAL FUNCTIONS
+        void askPhysicalQuestions();
+        void getPhysicalValues();
+        
 
         // GETTERS
         int getSocialScore(){
@@ -61,7 +71,8 @@ class Questions{
 
     private:
 
-        vector<questionData> bank;
+        vector<personQuestionData> personalityBank;
+        vector<string> physicalBank;
 
         int socialScore = 0;
         int processingScore = 0;

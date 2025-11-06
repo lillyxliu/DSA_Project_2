@@ -11,17 +11,19 @@ using namespace std;
 
 Person user;
 
-questionData dataPoint;
-Questions questionsObj;
+personQuestionData personalityDataPoint;
+Questions personalityQuestionsObj;
 
 
 void Questions::runTest(){
-    getValues();
-    askQuestions();
-    calculatePersonality();
+    // getPersonalityValues();
+    // askPersonalityQuestions();
+    // calculatePersonality();
+    // convertPersonalityScale();
+    getPhysicalValues();
 }
 
-void Questions::getValues() {
+void Questions::getPersonalityValues() {
     //read from csv file and populate 2d_vector
     ifstream data("../data/Questions.csv");
     if(!data.is_open()){
@@ -43,18 +45,17 @@ void Questions::getValues() {
       getline(ss, first_column, ',');
       getline(ss, second_column, ',');
       
-      dataPoint.question = question;
-      dataPoint.category = category;
-      dataPoint.flipped = true;  // Reset flipped to true for each new question
-      dataPoint.yesIndicates = first_column;
-      dataPoint.noIndicates = second_column;
+      personalityDataPoint.question = question;
+      personalityDataPoint.category = category;
+      personalityDataPoint.flipped = true;  // Reset flipped to true for each new question
+      personalityDataPoint.yesIndicates = first_column;
+      personalityDataPoint.noIndicates = second_column;
       
       if (first_column == "Extraversion" || first_column == "Intuition" || first_column == "Thinking" || first_column == "Perceiving"){
-        dataPoint.flipped = false;
+        personalityDataPoint.flipped = false;
       }
 
-      bank.push_back(dataPoint);
-
+      personalityBank.push_back(personalityDataPoint);
 
 }
   
@@ -77,17 +78,15 @@ void Questions::updateScore(string& category, int answer, bool flipped) {
     }
 }
 
-
-
-void Questions::askQuestions(){
+void Questions::askPersonalityQuestions(){
 
   cout << "We will now begin the questionnaire. Please answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
 
-  for (int i = 0; i < bank.size(); i++){
-    cout << i + 1 << ". " << bank[i].question << ": ";
-    cin >> bank[i].answer;
+  for (int i = 0; i < personalityBank.size(); i++){
+    cout << i + 1 << ". " << personalityBank[i].question << ": ";
+    cin >> personalityBank[i].answer;
 
-    updateScore(bank[i].category, bank[i].answer, bank[i].flipped);
+    updateScore(personalityBank[i].category, personalityBank[i].answer, personalityBank[i].flipped);
     
     // FOR TESTING
     // if(bank[i].flipped) cout << "(This question is flipped)" << endl;
@@ -108,7 +107,6 @@ void Questions::askQuestions(){
   }
 }
 
-
 void Questions::calculatePersonality(){
     string personalityType = "";
 
@@ -121,4 +119,44 @@ void Questions::calculatePersonality(){
     personalityType += (getTacticsScore() >= 0) ? "P" : "J";
 
     cout << "Your personality type is: " << personalityType << endl;
+}
+
+void Questions::convertPersonalityScale(){ 
+    // Convert scores from -10 to +10 scale to 0 to 1 scale
+    user.setSocialS((socialScore + 10) / 20.0 * 1.0);
+    user.setProcessS((processingScore + 10) / 20.0 * 1.0);
+    user.setDecisionS((decisionScore + 10) / 20.0 * 1.0);
+    user.setTactics((tacticsScore + 10) / 20.0 * 1.0);
+
+    // cout << user.getSocialS() << " " << user.getProcessS() << " " << user.getDecisionS() << " " << user.getTactics() << endl;
+}
+
+
+void Questions::getPhysicalValues() {
+    // Placeholder for physical questions implementation
+    //read from csv file and populate 2d_vector
+    ifstream data("../data/QuestionsPhysical.csv");
+    if(!data.is_open()){
+        cout << "Error opening file" << endl;
+        return;
+    }
+    string headers;
+    getline(data, headers,'"'); // 1st line
+    
+    string row_str;
+    
+    while(getline(data, row_str, '\n')){
+      stringstream ss(row_str);
+      string gender, height, eyes, race;
+    
+      getline(ss, gender, '"');
+      getline(ss, height, '"');
+      getline(ss, eyes, '"');   
+      getline(ss, race, '"');
+      
+      cout << gender << endl;
+
+      //NEED TO FINISH PARSING
+
+    }
 }
