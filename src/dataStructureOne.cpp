@@ -77,3 +77,65 @@ void heapSort(vector<string>& vector_id, Person& source_p, map<string,Person>& a
     }
 }
 
+/*
+// Generic heapify function
+template <typename T>
+void heapify_generic(vector<T>& vector_gen, int n, int i, bool ascending){
+    // Initialize extreme as root
+    int extreme = i;
+    // left index = 2*i + 1
+    int l = 2 * i + 1;
+    // right index = 2*i + 2
+    int r = 2 * i + 2;
+
+    if(ascending){
+        if (l <n) {
+            if(vector_gen[extreme] > vector_gen[l]){
+            extreme = l;
+        }
+    }
+    // If right child is larger than largest so far
+        if (r < n) {
+          if(vector_gen[extreme] > vector_gen[r]){
+                extreme = r;
+        }
+    }
+    }else{
+        if(l<n && vector_gen[extreme] < vector_gen[l]){
+            extreme = l;
+        }
+        if(r<n && vector_gen[extreme] < vector_gen[r]){
+            extreme = r;    
+        }
+    }
+    
+
+    // If largest is not root
+    if (extreme != i) {
+        swap(vector_gen[i], vector_gen[extreme]);
+        // Recursively heapify the affected sub-tree
+        heapify_generic(vector_gen, n, i, ascending);
+    }
+}
+// Generic heap sort function
+// citation: heap sort algorithinm: https://www.geeksforgeeks.org/dsa/cpp-program-for-heap-sort/
+template <typename T>
+void heapSort_generic(vector<T>& vector_gen , bool ascending){
+// ascending = true: min heap, ascending = false: max heap
+    int n = vector_gen.size();
+
+    // Build heap (rearrange vector)
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify_generic(vector_gen, n, i, ascending);
+
+    // One by one extract an element from heap
+    for (int i = n - 1; i > 0; i--) {
+
+        // Move current root to end
+        swap(vector_gen[0], vector_gen[i]);
+
+        // Call max heapify on the reduced heap
+        heapify_generic(vector_gen, n, i, ascending);
+    }
+}
+*/

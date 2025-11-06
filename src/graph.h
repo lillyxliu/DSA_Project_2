@@ -1,12 +1,15 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #pragma once
+
+#include <iostream>
+#include <ostream>
 #include <utility>
 #include <vector>
 #include <map>
 #include <string>
 #include "person.h"
-#include "functions.h"
+//#include "functions.h"
 using namespace std;
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
@@ -14,7 +17,11 @@ using namespace std;
 // https://www.geeksforgeeks.org/cpp/implementation-of-graph-in-cpp/
 // Slides: page 55 adjency list, page 58 one graph api
 class Graph{
+
+private:
 public: 
+    map<string, int> id_to_index; // id is string, int is index in nodes vector
+
     struct Node{
         string id;
         vector<pair<string,float>> neighbors; // string: id int: weight
@@ -31,9 +38,18 @@ public:
             nodes.push_back(Node("")); // empty id
         }
     }
+    Graph(const Graph& other){ // copy constructor
+        nodes = other.nodes;
+        id_to_index = other.id_to_index;
+    }
+    ~Graph(){ // destructor
+        // delete nothing since no dynamic memory
+    }
 
     void add_node(string id){
-        if(find_node_index(id) == -1){  
+        // search map for id, if not found add new node
+        if(id_to_index.find(id) == id_to_index.end()){ 
+            id_to_index[id] = nodes.size(); 
             nodes.push_back(Node(id));
         }
         // else: do nothing since node already exists
@@ -61,7 +77,7 @@ public:
 
         // add edge to adjacency list
         nodes[from_index].neighbors.push_back({to,weight});
-        nodes[to_index].neighbors.push_back({from,weight}); 
+     //   nodes[to_index].neighbors.push_back({from,weight}); 
     }
 
     int vertex_count(){
@@ -159,12 +175,20 @@ public:
     map<string, vector<pair<string, int>>> neighbors;
    
     int find_node_index(string id){
-        for(int i = 0; i< nodes.size();i++){
-            if(nodes[i].id == id){
-                return i;
-            }
+        auto iter = id_to_index.find(id);
+        // if the is found in the map return the index
+        if(iter != id_to_index.end()){
+            return iter->second;
         }
-        return -1; 
+        return -1; // if nothing is found in the map, return -1
+
+    // old vector implmentation  
+        // for(int i = 0; i< nodes.size();i++){
+        //     if(nodes[i].id == id){
+        //         return i;
+        //     }
+        // }
+        // return -1; 
     } 
 
 };

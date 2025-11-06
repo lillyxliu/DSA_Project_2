@@ -28,9 +28,9 @@ auto measure_time(T funct){
 
 
 int main(){ 
-    
-   ifstream data("../data/LargerDataset.csv");
-   // ifstream data("../data/dataset.csv");
+  //  ifstream data("../data/TestDataSet.csv");
+    //ifstream data("../data/LargerDataset.csv");
+    ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
@@ -106,7 +106,7 @@ int main(){
     /////////////////////////////////////////////////////
 
     cout << "Loaded " << a_map.size() << " people." << endl;
-    cout << "Loaded_vector" << vector_id.size() << " people." << endl;
+    cout << "Loaded vector " << vector_id.size() << " people." << endl;
 /*
     // /// testing graph
     // Graph g;
@@ -120,9 +120,11 @@ int main(){
 */
     cout << "Reached graph calculation" << endl;
 
-    int connections_max = 3;
-    //Calc Graph Implementaion
     Graph calc_graph;
+    calc_graph = build_graph(a_map, vector_id);
+    
+    // old version
+    /*
     for(int i =0; i< vector_id.size();i++){
         Person& person_one = a_map[vector_id[i]]; // create a copy of person one
       //  vector<pair<string,float>> similar_neighbors; // to store potential neighbors and their weights
@@ -144,7 +146,7 @@ int main(){
 
           //  similar_neighbors.push_back({person_two.getID(), total_weight});    // push back the id and weight of neighbors
             
-          if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
+            if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
                                calc_graph.find_node_index(person_two.getID()))){
                 continue; // skip if edge already exists
             }
@@ -158,10 +160,10 @@ int main(){
             }
         }
     }
-
-
+    */
+/**/
     cout << "Calculated Graph Implementation" << endl;
-    //calc_graph.printGraph(a_map);
+    calc_graph.printGraph(a_map);
 
 
     return 0;
