@@ -142,4 +142,90 @@ Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id){
     return calc_graph;
 }
 
+void lookupPerson(map<string,Person>& a_map){
+    string id;
+    cout << "Enter person ID to lookup: ";
+    cin >> id;
 
+    auto it = a_map.find(id);
+    if (it != a_map.end()) {
+        Person& p = it->second;
+        cout << "Person found:" << endl;
+        cout << "ID: " << p.getID() << endl;
+        cout << "First Name: " << p.getFirstName() << endl;
+        cout << "Last Name: " << p.getLasttName() << endl;
+
+        cout << "Social Score: " << p.getSocialS() << endl;
+        cout << "Process Score: " << p.getProcessS() << endl;
+        cout << "Decision Score: " << p.getDecisionS() << endl;
+        cout << "Tactics Score: " << p.getTactics() << endl;
+        cout << "Height Score: " << p.getHeightS() << endl;
+        cout << "Eye Score: " << p.getEyeS() << endl;
+        cout << "Hair Score: " << p.getHairS() << endl;
+        cout << "Gender Score: " << p.getGenderS() << endl;
+        cout << "Skin Score: " << p.getSkinS() << endl;
+
+
+    }
+    else{
+        cout << "Person not found." << endl;
+        return;
+    }
+
+}
+
+
+void viewPersonInfo(map<string,Person>& a_map, Graph& calc_graph){
+    string id;
+    cout << "Enter person ID to view person information: ";
+    cin >> id;
+    auto it = a_map.find(id);
+    if (it != a_map.end()) {
+        Person& p = it->second;
+        cout << "Person Information:" << endl;
+        cout << "ID: " << p.getID() << endl;
+        cout << "First Name: " << p.getFirstName() << endl;
+        cout << "Last Name: " << p.getLasttName() << endl;
+
+        cout << "Social Score: " << p.getSocialS() << endl;
+        cout << "Process Score: " << p.getProcessS() << endl;
+        cout << "Decision Score: " << p.getDecisionS() << endl;
+        cout << "Tactics Score: " << p.getTactics() << endl;
+        cout << "Height Score: " << p.getHeightS() << endl;
+        cout << "Eye Score: " << p.getEyeS() << endl;
+        cout << "Hair Score: " << p.getHairS() << endl;
+        cout << "Gender Score: " << p.getGenderS() << endl;
+        cout << "Skin Score: " << p.getSkinS() << endl;
+
+        // Displays connections from the graph
+        cout << "Connections:" << endl;
+        int index = calc_graph.find_node_index(id);
+        if (index != -1) {
+            auto& node = calc_graph.nodes[index];
+            for (const auto& neighbor : node.neighbors) {
+                string neighbor_id = neighbor.first;
+                float weight = neighbor.second;
+
+                if(a_map.find(neighbor_id) != a_map.end()){
+                    Person& neighbor_person = a_map[neighbor_id];
+                    cout << " - " << neighbor_person.getFirstName() << " (ID: " << neighbor_person.getID() << ", Weight: " << weight << ")" << endl;
+                    
+                }
+                else{
+                    cout << "Unknown Person" << endl;
+                }
+            }
+
+            
+        } else {
+            cout << "No connections found for this person." << endl;
+
+
+        }
+        
+}
+else{
+    cout << "Person not found." << endl;
+    return;
+}
+}

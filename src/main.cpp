@@ -152,12 +152,12 @@ int main(){
             Questions newPerson;
             newPerson.runTest();
         }
-        // else if(choice == 3){ //MENU CHOICE: LOOKUP PERSON
-        //     lookupPerson(a_map);
-        // }
-        // else if(choice == 4){ //MENU CHOICE: VIEW PERSON INFORMATION
-        //     viewPersonInfo(a_map);
-        // }
+        else if(choice == 3){ //MENU CHOICE: LOOKUP PERSON
+            lookupPerson(a_map);
+        }
+        else if(choice == 4){ //MENU CHOICE: VIEW PERSON INFORMATION
+            viewPersonInfo(a_map, calc_graph);
+        }
         else{
             listening = false;
             break;

@@ -46,5 +46,8 @@ void print_loaded_first_names(map<string,Person>& a_map, vector<string>& vector_
 Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id);
 
 
+void lookupPerson(map<string,Person>& a_map);
+
+void viewPersonInfo(map<string,Person>& a_map, Graph& calc_graph);
 
 #endif 
