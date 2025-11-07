@@ -21,7 +21,39 @@ using namespace std;
 
 
 int main(){ 
-    ifstream data("../data/dataset.csv");
+    
+
+    bool listening = true;
+    // string data_set_loaded = "dataset.csv";
+    while(listening){
+        cout << "Menu:" << endl;
+        cout << "0. Choose Data Set" << endl;
+        cout << "1. Graph Functions" << endl;
+        cout << "2. Add Person" << endl;
+        cout << "3. Lookup Person" << endl;
+        cout << "4. View Person Information" << endl;
+        cout << "5. Exit" << endl;
+        cout << "[Currently Loaded Data Set: dataset.csv]" << endl;
+        cout << "[Number of newly added people: ]" << endl;
+        cout << "Enter choice: ";
+
+        int choice;
+        cin >> choice;
+        string dataSetLoaded = "../data/dataset.csv";
+
+
+        if(choice == 0){ //MENU CHOICE: CHANGE DATA SET
+            // need to cin data set name
+            // match to format: ../data/dataset.csv with "dataset" being replaced
+            cout << "Enter data set name (without path or .csv): ";
+            string dataSetName;
+            cin >> dataSetName;
+            dataSetLoaded = "../data/" + dataSetName + ".csv";
+            cout << "Data set path changed to: " << dataSetLoaded << endl;
+
+        }
+
+    ifstream data(dataSetLoaded);
     
     if(!data.is_open()){
         cout << "Error opening file" << endl;
@@ -62,22 +94,8 @@ int main(){
     cout << "Calculated Graph Implementation" << endl;
     calc_graph.printGraph(a_map);
 
-    bool listening = true;
-    string data_set_loaded = "dataset.csv";
-    while(listening){
-        cout << "Menu:" << endl;
-        cout << "0. Choose Data Set" << endl;
-        cout << "1. Graph Functions" << endl;
-        cout << "2. Add Person" << endl;
-        cout << "3. Lookup Person" << endl;
-        cout << "4. View Person Information" << endl;
-        cout << "5. Exit" << endl;
-        cout << "[Currently Loaded Data Set: dataset.csv]" << endl;
-        cout << "[Number of newly added people: " << endl;
 
-        int choice;
-        cin >> choice;
-        if(choice == 1){
+        if(choice == 1){ //MENU CHOICE: GRAPH FUNCTIONS
             int choice_1;
             cout << "-----" << endl;
             cout << "> Graph Functions:" << endl;
@@ -128,14 +146,27 @@ int main(){
                     }
                 }
             }
-        }else{
+        }
+
+        else if(choice == 2){ //MENU CHOICE: ADD PERSON
+            Questions newPerson;
+            newPerson.runTest();
+        }
+        // else if(choice == 3){ //MENU CHOICE: LOOKUP PERSON
+        //     lookupPerson(a_map);
+        // }
+        // else if(choice == 4){ //MENU CHOICE: VIEW PERSON INFORMATION
+        //     viewPersonInfo(a_map);
+        // }
+        else{
             listening = false;
             break;
         } 
     }   
 
-    Questions qst;
-    qst.runTest();
+    
+
+    
     
     return 0;
 
