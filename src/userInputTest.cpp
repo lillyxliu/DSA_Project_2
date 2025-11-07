@@ -16,10 +16,10 @@ Questions personalityQuestionsObj;
 
 
 void Questions::runTest(){
-    // getPersonalityValues();
-    // askPersonalityQuestions();
-    // calculatePersonality();
-    // convertPersonalityScale();
+    getPersonalityValues();
+    askPersonalityQuestions();
+    calculatePersonality();
+    convertPersonalityScale();
     getPhysicalValues();
 }
 
@@ -80,11 +80,12 @@ void Questions::updateScore(string& category, int answer, bool flipped) {
 
 void Questions::askPersonalityQuestions(){
 
-  cout << "We will now begin the questionnaire. Please answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
+  cout << "We will now begin the questionnaire.\nPlease answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
 
   for (int i = 0; i < personalityBank.size(); i++){
     cout << i + 1 << ". " << personalityBank[i].question << ": ";
     cin >> personalityBank[i].answer;
+    
 
     updateScore(personalityBank[i].category, personalityBank[i].answer, personalityBank[i].flipped);
     
