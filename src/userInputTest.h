@@ -39,15 +39,15 @@ class Questions{
         void runTest();
 
         // PERSONALITY FUNCTIONS
-        void askPersonalityQuestions();
         void getPersonalityValues();
+        void askPersonalityQuestions();
         void updateScore(string& category, int answer, bool flipped);
         void calculatePersonality();
         void convertPersonalityScale();
 
         // PHYSICAL FUNCTIONS
-        void askPhysicalQuestions();
         void getPhysicalValues();
+        void askPhysicalQuestions();
         
 
         // GETTERS

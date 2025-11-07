@@ -7,6 +7,8 @@
 using namespace std;
 #include "person.h"
 #include "userInputTest.h"
+#include <limits>
+
 
 
 Person user;
@@ -21,6 +23,7 @@ void Questions::runTest(){
     calculatePersonality();
     convertPersonalityScale();
     getPhysicalValues();
+    askPhysicalQuestions();
 }
 
 void Questions::getPersonalityValues() {
@@ -82,9 +85,28 @@ void Questions::askPersonalityQuestions(){
 
   cout << "We will now begin the questionnaire.\nPlease answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
 
-  for (int i = 0; i < personalityBank.size(); i++){
-    cout << i + 1 << ". " << personalityBank[i].question << ": ";
-    cin >> personalityBank[i].answer;
+  //cin fail method from: https://www.geeksforgeeks.org/cpp/how-to-use-cin-fail-method-in-cpp/ 
+
+
+    int questionCount = personalityBank.size();
+
+  for (int i = 0; i < questionCount; i++){
+    int answer;
+    bool valid_input = false;
+    while (!valid_input) {
+        cout << "\n----------------------------------------" << endl;
+        cout << "Question " << i + 1 << " of " << questionCount << endl;
+        cout << personalityBank[i].question << ": ";
+        cin >> answer;
+        if (cin.fail() || answer < 1 || answer > 5) {
+            cin.clear(); // clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+            cout << "Invalid input. Please enter a number between 1 and 5." << endl;
+        } else {
+            valid_input = true;
+        }
+    }
+    personalityBank[i].answer = answer;
     
 
     updateScore(personalityBank[i].category, personalityBank[i].answer, personalityBank[i].flipped);
@@ -135,111 +157,101 @@ void Questions::convertPersonalityScale(){
 
 void Questions::getPhysicalValues() {
     ifstream data("../data/QuestionsPhysical.csv");
-    if(!data.is_open()){
+    if (!data.is_open()) {
         cout << "Error opening file" << endl;
         return;
     }
+
     string headers;
-    getline(data, headers); // 1st line
-    
+    getline(data, headers); // Skip header line
+
     string line;
-    while(getline(data, line)){
-      
-      if (line.empty()) continue; 
+    while (getline(data, line)) {
+        if (line.empty()) continue;
 
-    if(line.front() == '"') {
-        line.erase(0, 1);
-    }
-    if(!line.empty() && line.back() == '"') {
-        line.pop_back();  
-    }  
-    physicalBank.push_back(line);
-    }
-   for (int i = 0; i < physicalBank.size(); i++) {
+        // remove quotes
+        if (line.front() == '"') line.erase(0, 1);
+        if (!line.empty() && line.back() == '"') line.pop_back();
+
         PhysicalQuestion pq;
+        string curr_question = line;
 
-        string curr_question = physicalBank[i];
-        
-        // find where options start " a)"
         size_t pos = curr_question.find(" a)");
         if (pos != string::npos) {
             pq.question = curr_question.substr(0, pos);
-            cout << "Question " << i + 1 << ": " << pq.question << endl;
-            
-            // extract the rest of the string (the options)
-            string options = curr_question.substr(pos + 1); //  skips the initial space before 'a)'
-            
 
-            // split by patterns like "a)" "b)" "c)"
+            string options = curr_question.substr(pos + 1);
             char current_label = 'a';
-            while (true){
 
+            while (true) {
                 string label = string(1, current_label) + ")";
                 size_t start = options.find(label);
-
-                if (start == string::npos){ 
-                break;
-                }
+                if (start == string::npos) break;
 
                 size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
-                string choice;
-
-                if (next == string::npos)
-                    choice = options.substr(start + 2);
-                else
-                    choice = options.substr(start + 2, next - (start + 2));
+                string choice = (next == string::npos)
+                    ? options.substr(start + 2)
+                    : options.substr(start + 2, next - (start + 2));
 
                 pq.options.push_back(choice);
-                cout << "  " << label << " " << choice << endl;
+                current_label++;
+            }
+        } else {
+            pq.question = curr_question;
+        }
+
+        physicalBank.push_back(curr_question);
+        physical_questions.push_back(pq);
+    }
+}
+
+void Questions::askPhysicalQuestions() {
+    cout << "\nWe will now ask a few physical-related questions." << endl;
+
+    for (int i = 0; i < physical_questions.size(); i++) {
+        PhysicalQuestion& pq = physical_questions[i];
+        cout << "\n----------------------------------------" << endl;
+        cout << "Question " << i + 1 << ": " << pq.question << endl;
+
+        if (!pq.options.empty()) {
+            char current_label = 'a';
+            for (const auto& option : pq.options) {
+                cout << "  " << current_label << ") " << option << endl;
                 current_label++;
             }
 
-            //prompting user input
-
-            cout << "Enter your choice (a-" << char(current_label - 1) << "): ";
             char user_choice;
-            cin >> user_choice;
-            while (user_choice < 'a' || user_choice >= current_label) {
-                cout << "Invalid choice. Please enter a valid option (a-" << char(current_label - 1) << "): ";
+            bool valid = false;
+            while (!valid) {
+                cout << "Enter your choice (a-" << char('a' + pq.options.size() - 1) << "): ";
                 cin >> user_choice;
+                if (user_choice >= 'a' && user_choice < 'a' + pq.options.size()) {
+                    valid = true;
+                } else {
+                    cout << "Invalid choice. Please try again." << endl;
+                }
             }
-
             pq.user_answer = user_choice;
-            cout << "You selected option " << pq.user_answer << endl;
-
         } 
-        else{
-            
-            pq.question = curr_question;
-            cout << "Question " << i + 1 << ": " << pq.question << endl;
-            cout << "Your answer:" << endl;
-            string user_input_height;
-            getline(cin >> ws, user_input_height);
-            pq.options.push_back(user_input_height);
-            pq.user_answer = '-'; //the dash indicates that this is the height answer and not "a)" or smthing else
-            cout << endl;
-
+        else {
+            cout << "Your answer: ";
+            string user_input;
+            getline(cin >> ws, user_input);
+            pq.options.push_back(user_input);
+            pq.user_answer = '-';
         }
+    }
 
-        
-        physical_questions.push_back(pq);
-        cout << endl;
-    }  
-
-    //test to check whether it stored correctly
-
-    cout << "Here are your responses:\n";
-
-    for (const auto &pq : physical_questions) {
+    cout << "\nHere are your responses:\n";
+    for (const auto& pq : physical_questions) {
         cout << pq.question << endl;
         if (pq.user_answer != '-') {
             int index = pq.user_answer - 'a';
-            if (index >= 0 && index < pq.options.size())
-                cout << "  You chose: " << pq.user_answer << ") " << pq.options[index] << endl;
+            cout << "  You chose: " << pq.user_answer << ") " << pq.options[index] << endl;
         } else {
             cout << "  Your answer: " << pq.options[0] << endl;
         }
         cout << endl;
     }
-
 }
+
