@@ -18,161 +18,47 @@
 using namespace std::chrono;
 using namespace std;
 
-// https://www.geeksforgeeks.org/cpp/passing-a-function-as-a-parameter-in-cpp/
-template<typename T>
-auto measure_time(T funct){
-    auto start_funct = high_resolution_clock::now();
-    funct();
-    auto end_funct= high_resolution_clock::now();
-    return duration_cast<microseconds>(end_funct - start_funct);
-}
 
 
 int main(){ 
-  //  ifstream data("../data/TestDataSet.csv");
-    //ifstream data("../data/LargerDataset.csv");
     ifstream data("../data/dataset.csv");
     
-   //ifstream data("../data/dataset.csv");
-   // ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
     }
+
     string headers;
-    getline(data,headers,'\n'); // 1st line
-    
-    string row_str;
+    getline(data,headers,'\n'); // 1st line: skip header
+
     map<string, Person> a_map;
     vector<string> vector_id;
     
-    while(getline(data, row_str, '\n')){
-      Person p(row_str);
-      a_map.insert({p.getID(),p});
-      vector_id.push_back(p.getID());
-      
-    }
-    getline(data, row_str, '\n');
-    // cout << "Last line read: " << row_str << endl;
-    //Person source_p("Halia,Ahny,00000008,0.87,0.30,0.36,0.4,0.28,0.70,0.62,0.33,0.64");
-    //Person source_p("Ana,Chatter,00000009,0.81,0.99,0.99,0.00,0.61,0.98,0.82,0.61,0.31");
-    Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
-    // vector<string> vector_id_personality = vector_id;
-    // vector<string> vector_id_physical = vector_id;
-
+    load_people_data(data,a_map,vector_id);
+    data.close();
     
+    Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
+   
 
     /////////////////////////////////////////////////
     /// Measuring Sorting Algorithims
     /////////////////////////////////////////////////
 
     // Create copies of vector_id for each sorting algorithm and type
-    vector<string> vector_id_personality_heap = vector_id;
-    vector<string> vector_id_physical_heap = vector_id;
-    vector<string> vector_id_personality_quick = vector_id;
-    vector<string> vector_id_physical_quick = vector_id;
- 
+    
+    measure_sorting_algos(a_map,vector_id,source_p);
 
-    // Measure heapSort time
-    auto heap_pers_time = measure_time([&](){
-        heapSort(vector_id_personality_heap, source_p, a_map, 0); // by personality
-    });
-
-    auto heap_phys_time = measure_time([&](){
-        heapSort(vector_id_physical_heap, source_p, a_map, 1); // by physical
-    });
-
-    // cout << "heapSort took " << (heap_pers_time + heap_phys_time).count() << " microseconds." << endl;
-
-    // Measure quickSort time
-    auto quick_pers_time = measure_time([&](){
-        quickSort(vector_id_personality_quick, 0, vector_id_personality_quick.size() - 1, source_p, a_map, 0); // by personality
-    });
-
-    auto quick_phys_time = measure_time([&](){
-        quickSort(vector_id_physical_quick, 0, vector_id_physical_quick.size() - 1, source_p, a_map, 1); // by physical
-    });
-
-    // cout << "quickSort took " << (quick_pers_time + quick_phys_time).count() << " microseconds." << endl;
-
-
-    // // print vector print
-    // for(int i =0 ; i<vector_id.size();i++){
-    //     cout << a_map[vector_id_personality_heap[i]].getFirstName() << " "; 
-        
-    // }
-    // cout << endl;
-    // for(int i =0 ; i<vector_id.size();i++){
-    //     cout << a_map[vector_id_physical_heap[i]].getFirstName() << " "; 
-        
-    // }
-    cout << endl;
-    /////////////////////////////////////////////////////
+    print_loaded_first_names(a_map,vector_id);
 
     cout << "Loaded " << a_map.size() << " people." << endl;
     cout << "Loaded vector " << vector_id.size() << " people." << endl;
-/*
-    // /// testing graph
-    // Graph g;
-    // g.add_edge("Anny", "Bobby", 5);
-    // g.add_edge("Anny", "Cathy", 3);
-    // g.add_edge("Bobby", "Cathy", 2);
-    // g.add_edge("Cathy", "David", 4);
-    // cout << "Testing Graph Implementation" << endl;
-    // g.printGraph();
-*/
+   
+    /////////////////////////////////////////////////////
+    cout << "---------------------------" << endl;
     cout << "Reached graph calculation" << endl;
-
-
-    Graph calc_graph;
-    calc_graph = build_graph(a_map, vector_id);
     
-    // old version
-    /*
-    for(int i =0; i< vector_id.size();i++){
-        Person& person_one = a_map[vector_id[i]]; // create a copy of person one
-      //  vector<pair<string,float>> similar_neighbors; // to store potential neighbors and their weights
-        vector<string> ids_copy = vector_id; // copy of vector_id to modify
+    Graph calc_graph = build_graph(a_map, vector_id);
 
-        heapSort(ids_copy, person_one, a_map, 3); // sort by total weight
-
-        int neighbors_added = 0;
-
-        for(int j = 0; j< ids_copy.size(); j++){
-            if(person_one.getID()== ids_copy[j]) continue; // if index of same person, skip
-
-            Person& person_two = a_map[ids_copy[j]];    // create a copy of person two
-
-            float weight_personality_euclidean = person_one.calcPersDif_euclidean(person_two); // calculate personality weight
-            float weight_physical_euclidean = person_one.calcPhysicalDif_euclidean(person_two); // calculate physical weight
-          
-            float total_weight = (weight_personality_euclidean + weight_physical_euclidean)/2.0f; // average weight
-
-          //  similar_neighbors.push_back({person_two.getID(), total_weight});    // push back the id and weight of neighbors
-            
-            if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
-                               calc_graph.find_node_index(person_two.getID()))){
-                continue; // skip if edge already exists
-            }
-
-            calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
-            neighbors_added++;
-//           if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
-//                                calc_graph.find_node_index(person_two.getID()))){
-//                 continue; // skip if edge already exists
-//             }
-
-//             calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
-//             neighbors_added++;
-            
-            if(neighbors_added >= connections_max){
-                cout << "break!" << endl;
-                break; // if number of neighbors added reaches max allowed, stop so only top n neighbors connected
-            }
-        }
-    }
-    */
-/**/
     cout << "Calculated Graph Implementation" << endl;
     calc_graph.printGraph(a_map);
 
@@ -227,33 +113,30 @@ int main(){
                 else{
                     cout << "No edge exists between " << from_id << " and " << to_id << endl;
                 }
-            }
-            else if (choice_1 == 5){
-            string id;
-            cout << "Enter node ID to checkout: ";
-            cin >> id;
+            }else if (choice_1 == 5){
+                string id;
+                cout << "Enter node ID to checkout: ";
+                cin >> id;
 
-            int index = calc_graph.find_node_index(id);
-            if (index == -1) {
-                cout << "Node not found." << endl;
-            } 
-            else{
-                cout << "[" << a_map[id].getFirstName() << "]:" << endl;
-                for (auto neighbor : calc_graph.nodes[index].neighbors){
-                    cout << a_map[neighbor.first].getFirstName() << " (weight: " << neighbor.second << ")" << endl;
+                int index = calc_graph.find_node_index(id);
+                if (index == -1) {
+                    cout << "Node not found." << endl;
+                }else{
+                    cout << "[" << a_map[id].getFirstName() << "]:" << endl;
+                    for (auto neighbor : calc_graph.nodes[index].neighbors){
+                        cout << a_map[neighbor.first].getFirstName() << " (weight: " << neighbor.second << ")" << endl;
+                    }
                 }
             }
-        }
-
-        
         }else{
             listening = false;
             break;
-        }
+        } 
     }   
 
-//     return 0;
-Questions qst;
-qst.runTest();
+    Questions qst;
+    qst.runTest();
+    
+    return 0;
 
 }

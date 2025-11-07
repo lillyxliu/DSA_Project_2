@@ -14,9 +14,6 @@ void heapify(vector<string>& vector_id, Person& p_source, int n, int i , map<str
 
 void heapSort(vector<string>& vector_id, Person& source_p, map<string,Person>& a_map, int type);
 
-
-
-
 // Generic heapify function
 template <typename T>
 void heapify_generic(vector<T>& vector_gen, int n, int i, bool ascending){

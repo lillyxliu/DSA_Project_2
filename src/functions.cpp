@@ -35,11 +35,64 @@ float id_to_value_type(string& id, Person& p_source,  map<string,Person>& a_map,
         return id_to_value_physical(id, p_source, a_map);
     }else if(type == 2){
         return sum_personality_and_physical(id, p_source, a_map);
-    }else if(type == 3){
-        return 0.0; // placeholder
     }else{
         return 0.0; // placeholder
     } 
+}
+
+
+void load_people_data(ifstream& data,map<string,Person>& a_map, vector<string>& vector_id){    
+    string row_str;
+    while(getline(data, row_str, '\n')){
+      Person p(row_str);
+      a_map.insert({p.getID(),p});
+      vector_id.push_back(p.getID()); 
+    }
+}
+
+
+void measure_sorting_algos(map<string,Person>& a_map, vector<string>& vector_id, Person& source_p){
+    
+    vector<string> vector_id_personality_heap = vector_id;
+    vector<string> vector_id_physical_heap = vector_id;
+    vector<string> vector_id_personality_quick = vector_id;
+    vector<string> vector_id_physical_quick = vector_id;
+ 
+    // Lambda functions passed as paramters: https://www.w3schools.com/cpp/cpp_functions_lambda.asp 
+    // Measure heapSort time
+    auto heap_pers_time = measure_time([&](){
+        heapSort(vector_id_personality_heap, source_p, a_map, 0); // by personality
+    });
+
+    auto heap_phys_time = measure_time([&](){
+        heapSort(vector_id_physical_heap, source_p, a_map, 1); // by physical
+    });
+
+    cout << "heapSort took " << (heap_pers_time + heap_phys_time).count() << " microseconds." << endl;
+
+    // Measure quickSort time
+    auto quick_pers_time = measure_time([&](){
+        quickSort(vector_id_personality_quick, 0, vector_id_personality_quick.size() - 1, source_p, a_map, 0); // by personality
+    });
+
+    auto quick_phys_time = measure_time([&](){
+        quickSort(vector_id_physical_quick, 0, vector_id_physical_quick.size() - 1, source_p, a_map, 1); // by physical
+    });
+
+    cout << "quickSort took " << (quick_pers_time + quick_phys_time).count() << " microseconds." << endl;
+
+
+}
+
+
+void print_loaded_first_names(map<string,Person>& a_map, vector<string>& vector_id){
+    // print vector print
+    cout << "----------------------" << endl;
+    cout << "Printing first names: " << endl;
+    for(int i =0 ; i<vector_id.size();i++){
+        cout << a_map[vector_id[i]].getFirstName() << " "; 
+    }
+    cout << "Printing first names: " << endl;
 }
 
 
