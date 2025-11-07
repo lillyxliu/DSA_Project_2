@@ -14,6 +14,7 @@
 #include "graph.h"
 #include "functions.h"
 #include <chrono>
+#include "userInputTest.h"
 using namespace std::chrono;
 using namespace std;
 
@@ -31,6 +32,9 @@ int main(){
   //  ifstream data("../data/TestDataSet.csv");
     //ifstream data("../data/LargerDataset.csv");
     ifstream data("../data/dataset.csv");
+    
+   ifstream data("../data/dataset.csv");
+   // ifstream data("../data/dataset.csv");
     if(!data.is_open()){
         cout << "Error opening file" << endl;
         return 1;
@@ -49,7 +53,7 @@ int main(){
       
     }
     getline(data, row_str, '\n');
-    cout << "Last line read: " << row_str << endl;
+    // cout << "Last line read: " << row_str << endl;
     //Person source_p("Halia,Ahny,00000008,0.87,0.30,0.36,0.4,0.28,0.70,0.62,0.33,0.64");
     //Person source_p("Ana,Chatter,00000009,0.81,0.99,0.99,0.00,0.61,0.98,0.82,0.61,0.31");
     Person source_p("An,jee,00000005,0.80,1.00,1.00,0.00,0.60,0.99,0.80,0.60,0.35");
@@ -78,7 +82,7 @@ int main(){
         heapSort(vector_id_physical_heap, source_p, a_map, 1); // by physical
     });
 
-    cout << "heapSort took " << (heap_pers_time + heap_phys_time).count() << " microseconds." << endl;
+    // cout << "heapSort took " << (heap_pers_time + heap_phys_time).count() << " microseconds." << endl;
 
     // Measure quickSort time
     auto quick_pers_time = measure_time([&](){
@@ -89,7 +93,7 @@ int main(){
         quickSort(vector_id_physical_quick, 0, vector_id_physical_quick.size() - 1, source_p, a_map, 1); // by physical
     });
 
-    cout << "quickSort took " << (quick_pers_time + quick_phys_time).count() << " microseconds." << endl;
+    // cout << "quickSort took " << (quick_pers_time + quick_phys_time).count() << " microseconds." << endl;
 
 
     // // print vector print
@@ -114,7 +118,6 @@ int main(){
     // g.add_edge("Anny", "Cathy", 3);
     // g.add_edge("Bobby", "Cathy", 2);
     // g.add_edge("Cathy", "David", 4);
-
     // cout << "Testing Graph Implementation" << endl;
     // g.printGraph();
 */
@@ -154,6 +157,13 @@ int main(){
 
             calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
             neighbors_added++;
+//           if(calc_graph.isEdge(calc_graph.find_node_index(person_one.getID()), 
+//                                calc_graph.find_node_index(person_two.getID()))){
+//                 continue; // skip if edge already exists
+//             }
+
+//             calc_graph.add_edge(person_one.getID(), person_two.getID(), total_weight);
+//             neighbors_added++;
             
             if(neighbors_added >= connections_max){
                 cout << "break!" << endl;
@@ -198,5 +208,8 @@ int main(){
         }
     }   
 
-    return 0;
+//     return 0;
+Questions qst;
+qst.runTest();
+
 }

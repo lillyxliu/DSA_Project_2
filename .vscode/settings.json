@@ -42,5 +42,6 @@
         "ctime": "cpp",
         "map": "cpp",
         "ratio": "cpp"
+        "xstring": "cpp"
     }
 }
