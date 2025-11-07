@@ -201,7 +201,51 @@ int main(){
             cout << ">> 4. Check Edge Existence" << endl;
             cout << ">> 5. Checkout Node" << endl;
 
-            
+            cin >> choice_1;
+
+            if(choice_1 == 1){
+                calc_graph.printGraph(a_map);
+            }
+            else if (choice_1 == 2){
+                cout << "Vertex Count: " << calc_graph.vertex_count() << endl;
+            }
+            else if (choice_1 == 3){
+                cout << "Edge Count: " << calc_graph.edge_count() << endl;
+            }
+            else if (choice_1 == 4){
+                string from_id, to_id;
+                cout << "Enter first ID: ";
+                cin >> from_id;
+                cout << "Enter second ID: ";
+                cin >> to_id;
+                int from_index = calc_graph.find_node_index(from_id);
+                int to_index = calc_graph.find_node_index(to_id);
+                
+                if(calc_graph.isEdge(from_index, to_index)){
+                    cout << "Edge exists between " << from_id << " and " << to_id << endl;
+                }
+                else{
+                    cout << "No edge exists between " << from_id << " and " << to_id << endl;
+                }
+            }
+            else if (choice_1 == 5){
+            string id;
+            cout << "Enter node ID to checkout: ";
+            cin >> id;
+
+            int index = calc_graph.find_node_index(id);
+            if (index == -1) {
+                cout << "Node not found." << endl;
+            } 
+            else{
+                cout << "[" << a_map[id].getFirstName() << "]:" << endl;
+                for (auto neighbor : calc_graph.nodes[index].neighbors){
+                    cout << a_map[neighbor.first].getFirstName() << " (weight: " << neighbor.second << ")" << endl;
+                }
+            }
+        }
+
+        
         }else{
             listening = false;
             break;
