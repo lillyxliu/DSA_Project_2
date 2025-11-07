@@ -48,6 +48,6 @@ Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id);
 
 void lookupPerson(map<string,Person>& a_map);
 
-void viewPersonInfo(map<string,Person>& a_map, Graph& calc_graph);
+void viewPersonInfo(map<string,Person>& a_map);
 
 #endif 

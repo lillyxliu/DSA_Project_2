@@ -156,7 +156,7 @@ int main(){
             lookupPerson(a_map);
         }
         else if(choice == 4){ //MENU CHOICE: VIEW PERSON INFORMATION
-            viewPersonInfo(a_map, calc_graph);
+            viewPersonInfo(a_map);
         }
         else{
             listening = false;
