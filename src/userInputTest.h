@@ -23,6 +23,15 @@ struct personQuestionData
     /* data */
 };
 
+struct PhysicalQuestion
+{
+    string question;
+    vector<string> options;
+    
+    char user_answer = '-';
+
+};
+
 
 
 class Questions{
@@ -73,6 +82,8 @@ class Questions{
 
         vector<personQuestionData> personalityBank;
         vector<string> physicalBank;
+        
+        vector<PhysicalQuestion> physical_questions; //this stores the questions, its options and the user input 
 
         int socialScore = 0;
         int processingScore = 0;

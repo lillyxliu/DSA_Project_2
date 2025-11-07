@@ -155,43 +155,90 @@ void Questions::getPhysicalValues() {
     physicalBank.push_back(line);
     }
    for (int i = 0; i < physicalBank.size(); i++) {
-        cout << "Question " << i + 1 << endl;
+        PhysicalQuestion pq;
 
-        string q = physicalBank[i];
+        string curr_question = physicalBank[i];
         
         // find where options start " a)"
-        size_t pos = q.find(" a)");
+        size_t pos = curr_question.find(" a)");
         if (pos != string::npos) {
-            //printing question
-            cout << q.substr(0, pos) << endl;
-
+            pq.question = curr_question.substr(0, pos);
+            cout << "Question " << i + 1 << ": " << pq.question << endl;
+            
             // extract the rest of the string (the options)
-            string options = q.substr(pos + 1); //  skips the initial space before 'a)'
+            string options = curr_question.substr(pos + 1); //  skips the initial space before 'a)'
             
 
             // split by patterns like "a)" "b)" "c)"
             char current_label = 'a';
             while (true){
+
                 string label = string(1, current_label) + ")";
                 size_t start = options.find(label);
+
                 if (start == string::npos){ 
                 break;
                 }
 
                 size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
                 string choice;
+
                 if (next == string::npos)
                     choice = options.substr(start + 2);
                 else
                     choice = options.substr(start + 2, next - (start + 2));
 
+                pq.options.push_back(choice);
                 cout << "  " << label << " " << choice << endl;
                 current_label++;
             }
-        } else {
-            cout << q << endl;
+
+            //prompting user input
+
+            cout << "Enter your choice (a-" << char(current_label - 1) << "): ";
+            char user_choice;
+            cin >> user_choice;
+            while (user_choice < 'a' || user_choice >= current_label) {
+                cout << "Invalid choice. Please enter a valid option (a-" << char(current_label - 1) << "): ";
+                cin >> user_choice;
+            }
+
+            pq.user_answer = user_choice;
+            cout << "You selected option " << pq.user_answer << endl;
+
+        } 
+        else{
+            
+            pq.question = curr_question;
+            cout << "Question " << i + 1 << ": " << pq.question << endl;
+            cout << "Your answer:" << endl;
+            string user_input_height;
+            getline(cin >> ws, user_input_height);
+            pq.options.push_back(user_input_height);
+            pq.user_answer = '-'; //the dash indicates that this is the height answer and not "a)" or smthing else
+            cout << endl;
+
         }
 
+        
+        physical_questions.push_back(pq);
         cout << endl;
     }  
+
+    //test to check whether it stored correctly
+
+    cout << "Here are your responses:\n";
+
+    for (const auto &pq : physical_questions) {
+        cout << pq.question << endl;
+        if (pq.user_answer != '-') {
+            int index = pq.user_answer - 'a';
+            if (index >= 0 && index < pq.options.size())
+                cout << "  You chose: " << pq.user_answer << ") " << pq.options[index] << endl;
+        } else {
+            cout << "  Your answer: " << pq.options[0] << endl;
+        }
+        cout << endl;
+    }
+
 }
