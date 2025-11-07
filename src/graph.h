@@ -181,39 +181,9 @@ public:
             return iter->second;
         }
         return -1; // if nothing is found in the map, return -1
-
-    // old vector implmentation  
-        // for(int i = 0; i< nodes.size();i++){
-        //     if(nodes[i].id == id){
-        //         return i;
-        //     }
-        // }
-        // return -1; 
     } 
 
 };
-
-
-// #include <iostream>
-// #include<map>
-// #include<vector>
-// #include<iterator>
-// using namespace std;
-// int main()
-// {
-// int no_lines;
-// string from, to, wt;
-// map<string, vector<pair<string,int>>> graph;
-// cin >> no_lines;
-// for(int i = 0; i < no_lines; i++)
-// {
-// cin >> from >> to >> wt;
-// graph[from].push_back(make_pair(to, stoi(wt)));
-// if (graph.find(to)==graph.end())
-// graph[to] = {};
-// }
-// }
-
 
 
 
