@@ -192,10 +192,15 @@ void Questions::getPhysicalValues() {
                 size_t start = options.find(label);
                 if (start == string::npos) break;
 
-                size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
-                string choice = (next == string::npos)
-                    ? options.substr(start + 2)
-                    : options.substr(start + 2, next - (start + 2));
+
+                size_t next = options.find(" " + string(1, current_label + 1) + ")");
+                string choice;
+                if (next == string::npos) {
+                    choice = options.substr(start + 2);
+                } else {
+                    choice = options.substr(start + 2, next - (start + 2));
+                }
+
 
                 pq.options.push_back(choice);
                 current_label++;
