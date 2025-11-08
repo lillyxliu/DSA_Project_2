@@ -8,8 +8,7 @@ using namespace std;
 #include "person.h"
 #pragma once
 
-void quickSort(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type);
-
+void quick_sort(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type);
 int partition(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type);
 
 #endif 

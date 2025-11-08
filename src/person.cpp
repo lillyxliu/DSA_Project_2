@@ -7,10 +7,10 @@
 using namespace std;
 
 
-void Person::setAttributes(){
-   // cout << inputString << endl; //tester
+void Person::set_attributes(){
+    // cout << input_string << endl; //tester
     vector<string> tokens;
-    stringstream ss(inputString);
+    stringstream ss(input_string);
     string token; 
     
     while(getline(ss, token, ',')){
@@ -25,71 +25,51 @@ void Person::setAttributes(){
     getline string: https://www.geeksforgeeks.org/cpp/getline-string-c/ 
     string to float: https://en.cppreference.com/w/cpp/string/basic_string/stof
     */
-    firstName = tokens[0];
-    lastName = tokens[1];
+    first_name = tokens[0];
+    last_name = tokens[1];
     id = tokens[2];
-    heightS = stof(tokens[3]);
-    eyeS = stof(tokens[4]);
-    hairS = stof(tokens[5]);
-    genderS = stof(tokens[6]);
-    skinS = stof(tokens[7]);
-    socialS = stof(tokens[8]);
-    processS = stof(tokens[9]);
-    decisionS = stof(tokens[10]);
-    tacticsS = stof(tokens[11]);
+    height_s = stof(tokens[3]);
+    eye_s = stof(tokens[4]);
+    hair_s = stof(tokens[5]);
+    gender_s = stof(tokens[6]);
+    skin_s = stof(tokens[7]);
+    social_s = stof(tokens[8]);
+    process_s = stof(tokens[9]);
+    decision_s = stof(tokens[10]);
+    tactics_s = stof(tokens[11]);
 
-   // cout << firstName << " " << lastName << endl;
 }
 
-float Person::calcPhysicalDif(const Person& other){
-    float physicalDiff = 0.0;
-    physicalDiff = abs(heightS - other.heightS) +
-    abs(eyeS - other.eyeS) + abs(hairS - other.hairS)  + abs(skinS - other.skinS);
-    // gendrS difference excluded
-    return physicalDiff;
+float Person::calc_physical_dif(const Person& other){
+    float physical_dif = 0.0;
+    physical_dif = abs(height_s - other.height_s) +
+    abs(eye_s - other.eye_s) + abs(hair_s - other.hair_s)  + abs(skin_s - other.skin_s);
+    // gender_s difference excluded
+    return physical_dif;
 };
 
-float Person::calcPersDif(const Person& other){
-    float persDiff = 0.0;
-    persDiff = abs(socialS - other.socialS) + abs(processS - other.processS) +
-    abs(decisionS - other.decisionS) + abs(tacticsS - other.tacticsS);
-    return persDiff;
+float Person::calc_pers_dif(const Person& other){
+    float pers_dif = 0.0;
+    pers_dif = abs(social_s - other.social_s) + abs(process_s - other.process_s) +
+    abs(decision_s - other.decision_s) + abs(tactics_s - other.tactics_s);
+    return pers_dif;
 };
 
-float Person::calcPhysicalDif_euclidean(const Person& other){
-    float physicalDiff = 0.0;
-    physicalDiff = pow(heightS - other.heightS,2) + pow(eyeS - other.eyeS,2) +
-    pow(hairS - other.hairS,2) + pow(skinS- other.skinS,2);
-    // gendrS difference excluded
-    physicalDiff = sqrt(physicalDiff);
-    return physicalDiff;
+float Person::calc_physical_dif_euclidean(const Person& other){
+    float physical_dif = 0.0;
+    physical_dif = pow(height_s - other.height_s,2) + pow(eye_s - other.eye_s,2) +
+    pow(hair_s - other.hair_s,2) + pow(skin_s- other.skin_s,2);
+    // gender_s difference excluded
+    physical_dif = sqrt(physical_dif);
+    return physical_dif;
 };
 
-float Person::calcPersDif_euclidean(const Person& other){
-    float persDiff = 0.0;
-    persDiff = pow(socialS - other.socialS,2) + pow(processS - other.processS,2) +
-    pow(decisionS - other.decisionS,2) + pow(tacticsS - other.tacticsS,2);
-    persDiff = sqrt(persDiff); 
-    return persDiff;
+float Person::calc_pers_dif_euclidean(const Person& other){
+    float pers_dif = 0.0;
+    pers_dif = pow(social_s - other.social_s,2) + pow(process_s - other.process_s,2) +
+    pow(decision_s - other.decision_s,2) + pow(tactics_s - other.tactics_s,2);
+    pers_dif = sqrt(pers_dif); 
+    return pers_dif;
 };
 
 
-
-
-
-
-
-// 
-// We have two functions to compare our user inputed data to our dataset (completed)
-/*
-
-we need to compare every person in the dataset to our user inputed data - "Source - object" (this will come from the quiz)
-we will write the comparison, store the difference values
-when we sort these difference values, we get the scale from most to least different 
-
-- goals:
-- write heap and heap sort
-- need a data structure to store the heap
-- 
-
-*/

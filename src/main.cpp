@@ -17,10 +17,25 @@ using namespace std;
 
 int main(){ 
     bool listening = true;
-    string dataSetLoaded = "../data/dataset.csv";
+    string data_set_loaded = "../data/dataset.csv";
     map<string, Person> a_map;
     vector<string> vector_id;
     Graph calc_graph;
+    int newly_added_count = 0; // Counter for newly added people
+
+    // Load the default dataset at startup
+    ifstream initial_data(data_set_loaded);
+    if (initial_data.is_open()) {
+        string headers;
+        getline(initial_data, headers, '\n'); // skip header
+        load_people_data(initial_data, a_map, vector_id);
+        initial_data.close();
+        cout << "Default dataset loaded successfully: " << data_set_loaded << endl;
+        cout << "Loaded " << a_map.size() << " people." << endl;
+        calc_graph = build_graph(a_map, vector_id);
+    } else {
+        cout << "Warning: Could not load default dataset. Please use option 0 to load a dataset." << endl;
+    }
 
     while (listening) {
         cout << "----------------------------------" << endl;
@@ -31,8 +46,8 @@ int main(){
         cout << "3. Lookup Person" << endl;
         cout << "4. View Person Information" << endl;
         cout << "5. Exit" << endl;
-        cout << "[Currently Loaded Data Set: " << dataSetLoaded << "]" << endl;
-        cout << "[Number of newly added people: " << 0 << "]" << endl;
+        cout << "[Currently Loaded Data Set: " << data_set_loaded << "]" << endl;
+        cout << "[Number of newly added people: " << newly_added_count << "]" << endl;
         cout << "Enter choice: ";
 
         int choice;
@@ -40,11 +55,11 @@ int main(){
 
         if (choice == 0) { // CHANGE DATASET
             cout << "Enter data set name (without path or .csv): ";
-            string dataSetName;
-            cin >> dataSetName;
-            dataSetLoaded = "../data/" + dataSetName + ".csv";
+            string data_set_name;
+            cin >> data_set_name;
+            data_set_loaded = "../data/" + data_set_name + ".csv";
 
-            ifstream data(dataSetLoaded);
+            ifstream data(data_set_loaded);
             if (!data.is_open()) {
                 cout << "Error opening file. Reverting to previous dataset." << endl;
                 continue;
@@ -58,7 +73,7 @@ int main(){
             load_people_data(data, a_map, vector_id);
             data.close();
 
-            cout << "Data set loaded successfully: " << dataSetLoaded << endl;
+            cout << "Data set loaded successfully: " << data_set_loaded << endl;
             cout << "Loaded " << a_map.size() << " people." << endl;
 
             // rebuild graph
@@ -114,31 +129,49 @@ int main(){
                 if (index == -1) {
                     cout << "Node not found." << endl;
                 } else {
-                    cout << "[" << a_map[id].getFirstName() << "]:" << endl;
+                    cout << "[" << a_map[id].get_first_name() << "]:" << endl;
                     for (auto neighbor : calc_graph.nodes[index].neighbors) {
-                        cout << a_map[neighbor.first].getFirstName()
+                        cout << a_map[neighbor.first].get_first_name()
                              << " (weight: " << neighbor.second << ")" << endl;
                     }
                 }
             }
         } 
         else if (choice == 2) { // ADD PERSON
-            Questions newPerson;
-            newPerson.runTest();
+            try {
+                Questions new_person;
+                new_person.run_test();
+                // create new person
+                Person created = new_person.get_user_person();
+                if (!created.get_id().empty()) {
+                    // add to map
+                    if (a_map.find(created.get_id()) == a_map.end()) {
+                        a_map.insert({created.get_id(), created});
+                    }
+                    // add to graph
+                    add_person_to_graph(created, a_map, vector_id, calc_graph, 3);
+                }
+                newly_added_count++;
+                cout << "Person added successfully!" << endl;
+
+        // exception handling from: https://www.geeksforgeeks.org/cpp/exception-handling-c/ 
+            } catch (const exception& e) {
+                cerr << "Error adding person: " << e.what() << endl;
+            }
         } 
         else if (choice == 3) { // LOOKUP PERSON
             if (a_map.empty()) {
                 cout << "No dataset loaded. Please load a dataset first." << endl;
                 continue;
             }
-            lookupPerson(a_map);
+            lookup_person(a_map);
         } 
         else if (choice == 4) { // VIEW PERSON INFO
             if (a_map.empty()) {
                 cout << "No dataset loaded. Please load a dataset first." << endl;
                 continue;
             }
-            viewPersonInfo(a_map);
+            view_person_info(a_map);
         } 
         else if (choice == 5) { // EXIT
             cout << "Exiting program..." << endl;

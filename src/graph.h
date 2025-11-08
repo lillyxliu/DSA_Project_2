@@ -17,200 +17,45 @@ using namespace std;
 // https://www.geeksforgeeks.org/cpp/implementation-of-graph-in-cpp/
 // Slides: page 55 adjency list, page 58 one graph api
 class Graph{
-
-private:
 public: 
-    map<string, int> id_to_index; // id is string, int is index in nodes vector
-
     struct Node {
         string id;
         vector<pair<string,float>> neighbors; // string: id, float: weight
         
-        // Default constructor
-        Node() : id("") {}
-        
-        // Parameterized constructor
-        explicit Node(string id_) : id(std::move(id_)) {}
-        
-        // Copy constructor
-        Node(const Node& other) = default;
-        
-        // Assignment operator
-        Node& operator=(const Node& other) = default;
-        
-        // Destructor
-        ~Node() = default;
+        Node();
+        Node(string id_);
+        Node(const Node& other);
+        Node& operator=(const Node& other);
+        ~Node();
     };
 
-    vector<Node> nodes;
-
-    // Default constructor
-    Graph() = default;
-    
-    // Parameterized constructor: initialize v nodes
-    explicit Graph(int v) {
-        nodes.reserve(v);  // Pre-allocate space for efficiency
-        for(int i = 0; i < v; i++) {
-            nodes.push_back(Node("")); // empty id
-        }
-    }
-    
-    // Copy constructor
-    Graph(const Graph& other) 
-        : nodes(other.nodes), 
-          id_to_index(other.id_to_index) {}
-    
-    // Assignment operator
-    Graph& operator=(const Graph& other) {
-        if (this != &other) {
-            nodes = other.nodes;
-            id_to_index = other.id_to_index;
-        }
-        return *this;
-    }
-    
-    // Destructor (no dynamic memory to clean up)
-    ~Graph() = default;
-
-    void add_node(string id){
-        // search map for id, if not found add new node
-        if(id_to_index.find(id) == id_to_index.end()){ 
-            id_to_index[id] = nodes.size(); 
-            nodes.push_back(Node(id));
-        }
-        // else: do nothing since node already exists
-    }
-
-    void add_edge(string from, string to , float weight){
-        if(to == from){
-            return; // don't create edges for identical nodes
-        }
-        // if a node for an id not exist, add node
-        // if it already exists, this does nothing
-        add_node(from);
-        add_node(to);
-
-        // find the index of the new nodes from the id
-        int from_index = find_node_index(from);
-        int to_index = find_node_index(to);
-
-        // no duplicate edges:
-        for(auto neighbor: nodes[from_index].neighbors){
-            if(neighbor.first == to){
-                return; // edge already exists
-            }
-        }
-
-        // add edge to adjacency list
-        nodes[from_index].neighbors.push_back({to,weight});
-     //   nodes[to_index].neighbors.push_back({from,weight}); 
-    }
-
-    int vertex_count(){
-        // reutn num of vertices
-        return nodes.size();
-    }
-    int edge_count(){
-        // return num of edges
-        int count = 0;
-        for(int i = 0; i< nodes.size();i++){
-            count += nodes[i].neighbors.size();
-        }
-        return count/2; // undirected graph so each edge is counted twice
-    }
-    
-
-    bool isEdge(int from, int to){
-        // get index of from node's id
-        if(from< 0 || to <0 ){
-            return false;
-        }
-        if(from >= nodes.size() || to >= nodes.size()){
-            return false;
-        }
-
-
-        int from_index = find_node_index(nodes[from].id);
-        int to_index = find_node_index(nodes[to].id);
-
-        if(from_index == -1 || to_index == -1){
-            return false; // one of the nodes does not exist
-        }
-
-        //for(int i = 0; i<nodes[from_index].neighbors.size();i++){
-        for(auto neighbor: nodes[from_index].neighbors){ // checking from neighor to neighbors  
-        // checks if the id of node's neighbor's at i index matches node's at 2nd index's actual id
-            if(neighbor.first == nodes[to_index].id){
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    int getWeight(int from, int to){
-         int from_index = find_node_index(nodes[from].id);
-        int to_index = find_node_index(nodes[to].id);
-
-        for(int i = 0; i<nodes[from_index].neighbors.size();i++){
-            // checks if the id of node's neighbor's at i index matches node's at 2nd index's actual id
-            if(nodes[from_index].neighbors[i].first== nodes[to_index].id){
-                return nodes[from_index].neighbors[i].second;
-            }
-        }
-        return -1; // edge not found
-
-    }
-    vector<int> getAdjacent(string id){
-        int node_index = find_node_index(id);
-        vector<int> adjacent_indices;
-
-        if(node_index == -1){
-            return adjacent_indices; // empty vector
-        }
-        for(auto neighbor: nodes[node_index].neighbors){
-            // every loop acceses an index in the vector of pairs of the node
-            // the first element of the pair is the id of the neighbor node
-            /// pushes back the node index of the neighbor found id
-            adjacent_indices.push_back(find_node_index(neighbor.first));
-        }
-        return adjacent_indices;
-    }
-    void printGraph(){
-        for(auto node: nodes){
-            for(auto neighbor: node.neighbors){
-                cout << node.id << ": " << neighbor.first << "; weight: " << neighbor.second << ";" << endl;
-            }
-        }
-    }
-
-    void printGraph(map<string,Person>& a_map){
-        for(auto node: nodes){
-            cout << endl << "[" << a_map[node.id].getFirstName() << "]: " ;
-            for(auto neighbor: node.neighbors){
-                cout << a_map[neighbor.first].getFirstName() << "(" << neighbor.second << ")";
-                if( neighbor.first != node.neighbors.back().first){
-                    cout << ", ";
-                }
-            }
-            cout << endl;
-        }
-    }
-     
-    // adjacency list
-    map<string, vector<pair<string, int>>> neighbors;
    
-    int find_node_index(string id){
-        auto iter = id_to_index.find(id);
-        // if the is found in the map return the index
-        if(iter != id_to_index.end()){
-            return iter->second;
-        }
-        return -1; // if nothing is found in the map, return -1
-    } 
+
+
+public:
+    vector<Node> nodes;
+    map<string, int> id_to_index; // id is string, int is index in nodes vector
+
+    Graph();
+    Graph(int v);
+    Graph(const Graph& other);
+    Graph& operator=(const Graph& other);
+    ~Graph();
+
+    void add_node(string id);
+    void add_edge(string from, string to, float weight);
+    int vertex_count();
+    int edge_count();
+    bool isEdge(int form, int to);
+    int getWeight(int from, int to);
+    vector<int> getAdjacent(string id);
+    void printGraph();
+    void printGraph(map<string,Person>& a_map);
+    int find_node_index(string id);
+
+    const vector<Node>& get_nodes() const;
+    const map<string, int>& get_id_to_index() const;
 
 };
-
-
 
 #endif
