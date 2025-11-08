@@ -315,10 +315,24 @@ void Questions::get_physical_values() {
                 string label = string(1, current_label) + ")";
                 size_t start = options.find(label);
                 if (start == string::npos) break;
+<<<<<<< HEAD
                 size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
                 string choice = (next == string::npos)
                     ? options.substr(start + 2)
                     : options.substr(start + 2, next - (start + 2));
+=======
+
+
+                size_t next = options.find(" " + string(1, current_label + 1) + ")");
+                string choice;
+                if (next == string::npos) {
+                    choice = options.substr(start + 2);
+                } else {
+                    choice = options.substr(start + 2, next - (start + 2));
+                }
+
+
+>>>>>>> 264df5fa7e10e1a82c8f0ac67eafe45377eda469
                 pq.options.push_back(choice);
                 current_label++;
             }
