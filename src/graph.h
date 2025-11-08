@@ -22,29 +22,55 @@ private:
 public: 
     map<string, int> id_to_index; // id is string, int is index in nodes vector
 
-    struct Node{
+    struct Node {
         string id;
-        vector<pair<string,float>> neighbors; // string: id int: weight
-        Node(string id_){
-            id = id_;
-        }
+        vector<pair<string,float>> neighbors; // string: id, float: weight
+        
+        // Default constructor
+        Node() : id("") {}
+        
+        // Parameterized constructor
+        explicit Node(string id_) : id(std::move(id_)) {}
+        
+        // Copy constructor
+        Node(const Node& other) = default;
+        
+        // Assignment operator
+        Node& operator=(const Node& other) = default;
+        
+        // Destructor
+        ~Node() = default;
     };
 
     vector<Node> nodes;
 
-    Graph(){} // defualt constructor
-    Graph(int v){ // constructor: initalize v nodes
-        for(int i =0; i< v;i++){
+    // Default constructor
+    Graph() = default;
+    
+    // Parameterized constructor: initialize v nodes
+    explicit Graph(int v) {
+        nodes.reserve(v);  // Pre-allocate space for efficiency
+        for(int i = 0; i < v; i++) {
             nodes.push_back(Node("")); // empty id
         }
     }
-    Graph(const Graph& other){ // copy constructor
-        nodes = other.nodes;
-        id_to_index = other.id_to_index;
+    
+    // Copy constructor
+    Graph(const Graph& other) 
+        : nodes(other.nodes), 
+          id_to_index(other.id_to_index) {}
+    
+    // Assignment operator
+    Graph& operator=(const Graph& other) {
+        if (this != &other) {
+            nodes = other.nodes;
+            id_to_index = other.id_to_index;
+        }
+        return *this;
     }
-    ~Graph(){ // destructor
-        // delete nothing since no dynamic memory
-    }
+    
+    // Destructor (no dynamic memory to clean up)
+    ~Graph() = default;
 
     void add_node(string id){
         // search map for id, if not found add new node

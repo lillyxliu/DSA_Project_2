@@ -4,6 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include <map>
+#include <algorithm>
 using namespace std;
 #include "person.h"
 #include "userInputTest.h"
@@ -83,7 +84,9 @@ void Questions::updateScore(string& category, int answer, bool flipped) {
 
 void Questions::askPersonalityQuestions(){
 
-  cout << "We will now begin the questionnaire.\nPlease answer the following questions on a scale from 1 to 5, where 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
+cout << "\n---------------------------------------- \nPersonality Test" << endl;
+
+  cout << " \nWe will now begin the questionnaire.\nPlease answer the following questions on a scale from 1 to 5\nWhere 1 means 'Strongly Disagree' and 5 means 'Strongly Agree'." << endl;
 
   //cin fail method from: https://www.geeksforgeeks.org/cpp/how-to-use-cin-fail-method-in-cpp/ 
 
@@ -131,9 +134,10 @@ void Questions::askPersonalityQuestions(){
 }
 
 void Questions::calculatePersonality(){
-    string personalityType = "";
+    cout << "\n----------------------------------------" << endl;
+    cout << "End of Personality Test" << endl;
 
-    cout << socialScore << " " << processingScore << " " << decisionScore << " " << tacticsScore << endl;
+    string personalityType = "";
 
 
     personalityType += (getSocialScore() >= 0) ? "E" : "I";
@@ -205,7 +209,53 @@ void Questions::getPhysicalValues() {
     }
 }
 
+
+// Helper function for validating height input in format like 5'9
+string getValidHeight() {
+    string height;
+
+    while (true) {
+        cout << "Enter your height (example: 5'9): ";
+        getline(cin >> ws, height);
+
+        // remove spaces
+        height.erase(remove(height.begin(), height.end(), ' '), height.end());
+
+        // find apostrophe
+        size_t apostrophePos = height.find('\'');
+
+        // check for valid structure
+        if (apostrophePos == string::npos || apostrophePos == 0 || apostrophePos == height.length() - 1) {
+            cout << "Invalid format. Please use the correct format.\n";
+            continue;
+        }
+
+        // extract feet and inches
+        string feet = height.substr(0, apostrophePos);
+        string inches = height.substr(apostrophePos + 1);
+
+        bool valid = true;
+
+        // ensure both are numeric
+        for (char c : feet)
+            if (!isdigit(c)) valid = false;
+        for (char c : inches)
+            if (!isdigit(c)) valid = false;
+
+        if (!valid) {
+            cout << "Invalid format. Please use numbers only, like 5'9.\n";
+            continue;
+        }
+
+        return height; // valid input
+    }
+}
+
+
+
 void Questions::askPhysicalQuestions() {
+    cout << "\n----------------------------------------" << endl;
+    cout << "Physical Test" << endl;
     cout << "\nWe will now ask a few physical-related questions." << endl;
 
     for (int i = 0; i < physical_questions.size(); i++) {
@@ -234,12 +284,20 @@ void Questions::askPhysicalQuestions() {
             pq.user_answer = user_choice;
         } 
         else {
-            cout << "Your answer: ";
-            string user_input;
-            getline(cin >> ws, user_input);
-            pq.options.push_back(user_input);
-            pq.user_answer = '-';
-        }
+    // Special handling for height question
+    if (pq.question.find("tall") != string::npos || pq.question.find("height") != string::npos) {
+        string validHeight = getValidHeight();
+        pq.options.push_back(validHeight);
+        pq.user_answer = '-';
+    } else {
+        cout << "Your answer: ";
+        string user_input;
+        getline(cin >> ws, user_input);
+        pq.options.push_back(user_input);
+        pq.user_answer = '-';
+    }
+}
+
     }
 
     cout << "\nHere are your responses:\n";
@@ -253,5 +311,8 @@ void Questions::askPhysicalQuestions() {
         }
         cout << endl;
     }
+
+    cout << "----------------------------------------" << endl;
+    cout << "End of Physical Test" << endl;
 }
 

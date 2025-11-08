@@ -17,25 +17,80 @@ struct personQuestionData
     bool flipped = true;
     string yesIndicates;
     string noIndicates;
-    
     int answer = 0;
 
-    /* data */
+    // Default constructor
+    personQuestionData() : question(""), category(""), flipped(true), 
+                          yesIndicates(""), noIndicates(""), answer(0) {}
+    
+    // Parameterized constructor
+    personQuestionData(const string& q, const string& c, bool f, 
+                      const string& yes, const string& no, int a = 0)
+        : question(q), category(c), flipped(f), 
+          yesIndicates(yes), noIndicates(no), answer(a) {}
+    
+    // Copy constructor
+    personQuestionData(const personQuestionData& other) = default;
+    
+    // Destructor
+    ~personQuestionData() = default;
 };
 
 struct PhysicalQuestion
 {
     string question;
     vector<string> options;
-    
     char user_answer = '-';
 
+    // Default constructor
+    PhysicalQuestion() : question(""), options(), user_answer('-') {}
+    
+    // Parameterized constructor
+    PhysicalQuestion(const string& q, const vector<string>& opts, char ans = '-')
+        : question(q), options(opts), user_answer(ans) {}
+    
+    // Copy constructor
+    PhysicalQuestion(const PhysicalQuestion& other) = default;
+    
+    // Destructor
+    ~PhysicalQuestion() = default;
 };
 
 
 
-class Questions{
-    public: 
+class Questions {
+    public:
+        // Default constructor
+        Questions() : socialScore(0), processingScore(0), 
+                     decisionScore(0), tacticsScore(0) {}
+        
+        // Copy constructor
+        Questions(const Questions& other) 
+            : personalityBank(other.personalityBank),
+              physicalBank(other.physicalBank),
+              physical_questions(other.physical_questions),
+              socialScore(other.socialScore),
+              processingScore(other.processingScore),
+              decisionScore(other.decisionScore),
+              tacticsScore(other.tacticsScore) {}
+        
+        // Assignment operator
+        Questions& operator=(const Questions& other) {
+            if (this != &other) {
+                personalityBank = other.personalityBank;
+                physicalBank = other.physicalBank;
+                physical_questions = other.physical_questions;
+                socialScore = other.socialScore;
+                processingScore = other.processingScore;
+                decisionScore = other.decisionScore;
+                tacticsScore = other.tacticsScore;
+            }
+            return *this;
+        }
+        
+        // Destructor
+        ~Questions() = default;
+
         void runTest();
 
         // PERSONALITY FUNCTIONS
