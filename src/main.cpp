@@ -15,6 +15,8 @@
 using namespace std::chrono;
 using namespace std;
 
+// Larger Dataset Names Generated from https://1000randomnames.com/ 
+
 int main(){ 
     bool listening = true;
     string data_set_loaded = "../data/dataset.csv";
@@ -32,7 +34,14 @@ int main(){
         initial_data.close();
         cout << "Default dataset loaded successfully: " << data_set_loaded << endl;
         cout << "Loaded " << a_map.size() << " people." << endl;
-        calc_graph = build_graph(a_map, vector_id, "heap");
+
+        // timing the heap sort graph 
+        auto heap_graph = measure_time([&](){
+            calc_graph = build_graph(a_map, vector_id, "heap");
+        });
+        cout << "Graph build took " << heap_graph.count() << " microseconds." << endl;
+
+        
     } else {
         cout << "Warning: Could not load default dataset. Please use option 0 to load a dataset." << endl;
     }
