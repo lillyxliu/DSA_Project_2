@@ -36,18 +36,19 @@ int partition_pairs(vector<pair<string,float>>& vec, int low, int high) {
 int partition(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type) {
     string pivot_id = vector_id[low];
     float pivot_value = id_to_value_type(pivot_id, source_p, a_map, type);
-    int up = low;
-    int down = high;
-    while (up < down) {
-        while (up < high && id_to_value_type(vector_id[up], source_p, a_map, type) <= pivot_value)
-            up++;
-        while (id_to_value_type(vector_id[down], source_p, a_map, type) > pivot_value)
-            down--;
-        if (up < down)
-            swap(vector_id[up], vector_id[down]);
+    int left = low - 1;
+    int right = high + 1;
+    while (true) {
+        do {
+            left++;
+        } while (id_to_value_type(vector_id[left], source_p, a_map, type) < pivot_value);
+        do {
+            right--;
+        } while (id_to_value_type(vector_id[right], source_p, a_map, type) > pivot_value);
+        if (left >= right)
+            return right;
+        swap(vector_id[left], vector_id[right]);
     }
-    swap(vector_id[low], vector_id[down]);
-    return down;
 }
     void quick_sort_pairs(vector<pair<string,float>>& vec, int low, int high) {
     if (low < high) {

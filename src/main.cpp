@@ -18,6 +18,9 @@ using namespace std;
 // Larger Dataset Names Generated from https://1000randomnames.com/ 
 
 int main(){ 
+    cout << "----------------------------------" << endl;
+    cout << "   Welcome to the DoppleGator!!" << endl;
+    cout << "----------------------------------\n\n" << endl;  
     bool listening = true;
     string data_set_loaded = "../data/dataset.csv";
     map<string, Person> a_map;
@@ -85,7 +88,8 @@ int main(){
 
             cout << "Data set loaded successfully: " << data_set_loaded << endl;
 
-            
+            load_people_data(initial_data, a_map, vector_id);
+            cout << "Loaded " << a_map.size() << " people." << endl;
         } 
 
         else if(choice == 1) { // CHOOSE SORTING ALGORITHM
@@ -94,14 +98,18 @@ int main(){
             cin >> algo_choice;
             if (algo_choice == "heap") {
                 // rebuild graph
+                auto heap_graph = measure_time([&](){
                 calc_graph = build_graph(a_map, vector_id, "heap");
-                cout << "Graph rebuilt using heap sort." << endl;
+                });
+                cout << "Graph rebuilt using heap sort takes " << heap_graph.count() << " microseconds." << endl;
 
             }
             if(algo_choice == "quick") {
                 // rebuild graph
+                auto quick_graph = measure_time([&](){
                 calc_graph = build_graph(a_map, vector_id, "quick");
-                cout << "Graph rebuilt using quick sort." << endl;
+                });
+                cout << "Graph rebuilt using quick sort takes " << quick_graph.count() << " microseconds." << endl;
 
             }
             else {
@@ -129,13 +137,20 @@ int main(){
             cin >> choice_1;
 
             if (choice_1 == 1) {
+                
                 calc_graph.printGraph(a_map);
             }
             else if (choice_1 == 2) {
+                cout << "----------------------------------" << endl;
                 cout << "Vertex Count: " << calc_graph.vertex_count() << endl;
+                cout << "----------------------------------" << endl;
+
             }
             else if (choice_1 == 3) {
+                cout << "----------------------------------" << endl;
                 cout << "Edge Count: " << calc_graph.edge_count() << endl;
+                cout << "----------------------------------" << endl;
+
             }
             else if (choice_1 == 4) {
                 string from_id, to_id;
@@ -147,9 +162,9 @@ int main(){
                 int to_index = calc_graph.find_node_index(to_id);
 
                 if (calc_graph.isEdge(from_index, to_index)) {
-                    cout << "Edge exists between " << from_id << " and " << to_id << endl;
+                    cout << "Edge exists between " << lookup_id_get_obj(from_id,a_map).get_first_name() << " and " << lookup_id_get_obj(to_id,a_map).get_first_name() << endl;
                 } else {
-                    cout << "No edge exists between " << from_id << " and " << to_id << endl;
+                    cout << "No edge exists between " << lookup_id_get_obj(from_id,a_map).get_first_name() << " and " << lookup_id_get_obj(to_id,a_map).get_first_name() << endl;
                 }
             }
             else if (choice_1 == 5) {
@@ -184,7 +199,10 @@ int main(){
                     string sorting_algorithim  = "";
                     cout << "Select Sorting Algorithm to Add Person to Graph (heap/quick)" << endl;
                     cin >> sorting_algorithim;
+                    auto time_graph = measure_time([&](){
                     add_person_to_graph(created, a_map, vector_id, calc_graph, 3, sorting_algorithim);
+                    });
+                    cout << "Graph rebuilt after adding person with " << sorting_algorithim << " takes " << time_graph.count() << " microseconds." << endl;
                 }
                 newly_added_count++;
                 cout << "Person added successfully!" << endl;

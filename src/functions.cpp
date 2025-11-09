@@ -106,7 +106,7 @@ Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id, string s
 
     if(sort_option == "heap" || sort_option == "Heap"){
         heap_sort_generic(pre_calc_weights[i], true);
-    }else if(sort_option == "quick" || sort_option == "Heap"){
+    }else if(sort_option == "quick" || sort_option == "Quick"){
         quick_sort_pairs(pre_calc_weights[i], 0, pre_calc_weights[i].size()-1);
     }else{
         heap_sort_generic(pre_calc_weights[i],false);
@@ -115,11 +115,10 @@ Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id, string s
             calc_graph.add_edge(vector_id[i], pre_calc_weights[i][c].first, pre_calc_weights[i][c].second);
         }
         count++;
-        cout << "Loaded: ";
+        
         if ((vector_id.size() >= 10 && count % (vector_id.size() / 10) == 0) || vector_id.size() < 10) {
-            cout << count << "; " ;
+            cout << "Loaded: " << count << "; " << endl;
         }
-        cout << endl;
     }
     return calc_graph;
 }
