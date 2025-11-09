@@ -32,7 +32,7 @@ int main(){
         initial_data.close();
         cout << "Default dataset loaded successfully: " << data_set_loaded << endl;
         cout << "Loaded " << a_map.size() << " people." << endl;
-        calc_graph = build_graph(a_map, vector_id);
+        calc_graph = build_graph(a_map, vector_id, "heap");
     } else {
         cout << "Warning: Could not load default dataset. Please use option 0 to load a dataset." << endl;
     }
@@ -41,11 +41,12 @@ int main(){
         cout << "----------------------------------" << endl;
         cout << "Menu:" << endl;
         cout << "0. Choose Data Set" << endl;
-        cout << "1. Graph Functions" << endl;
-        cout << "2. Add Person" << endl;
-        cout << "3. Lookup Person" << endl;
-        cout << "4. View Person Information" << endl;
-        cout << "5. Exit" << endl;
+        cout << "1. Choose Sorting Algorithm" << endl;
+        cout << "2. Graph Functions" << endl;
+        cout << "3. Add Person" << endl;
+        cout << "4. Lookup Person" << endl;
+        cout << "5. View Person Information" << endl;
+        cout << "6. Exit" << endl;
         cout << "[Currently Loaded Data Set: " << data_set_loaded << "]" << endl;
         cout << "[Number of newly added people: " << newly_added_count << "]" << endl;
         cout << "Enter choice: ";
@@ -74,12 +75,34 @@ int main(){
             data.close();
 
             cout << "Data set loaded successfully: " << data_set_loaded << endl;
-            cout << "Loaded " << a_map.size() << " people." << endl;
 
-            // rebuild graph
-            calc_graph = build_graph(a_map, vector_id);
+            
         } 
-        else if (choice == 1) { // GRAPH FUNCTIONS
+
+        else if(choice == 1) { // CHOOSE SORTING ALGORITHM
+            cout << "Choose sorting algorithm (heap/quick): ";
+            string algo_choice;
+            cin >> algo_choice;
+            if (algo_choice == "heap") {
+                // rebuild graph
+                calc_graph = build_graph(a_map, vector_id, "heap");
+                cout << "Graph rebuilt using heap sort." << endl;
+
+            }
+            if(algo_choice == "quick") {
+                // rebuild graph
+                calc_graph = build_graph(a_map, vector_id, "quick");
+                cout << "Graph rebuilt using quick sort." << endl;
+
+            }
+            else {
+                cout << "Invalid choice. Please enter 'heap' or 'quick'." << endl;
+            }
+        }
+
+
+
+        else if (choice == 2) { // GRAPH FUNCTIONS
             if (a_map.empty()) {
                 cout << "No dataset loaded. Please load a dataset first." << endl;
                 continue;
@@ -137,7 +160,7 @@ int main(){
                 }
             }
         } 
-        else if (choice == 2) { // ADD PERSON
+        else if (choice == 3) { // ADD PERSON
             try {
                 Questions new_person;
                 new_person.run_test();
@@ -149,31 +172,35 @@ int main(){
                         a_map.insert({created.get_id(), created});
                     }
                     // add to graph
-                    add_person_to_graph(created, a_map, vector_id, calc_graph, 3);
+                    string sorting_algorithim  = "";
+                    cout << "Select Sorting Algorithm to Add Person to Graph (heap/quick)" << endl;
+                    cin >> sorting_algorithim;
+                    add_person_to_graph(created, a_map, vector_id, calc_graph, 3, sorting_algorithim);
                 }
                 newly_added_count++;
                 cout << "Person added successfully!" << endl;
+
 
         // exception handling from: https://www.geeksforgeeks.org/cpp/exception-handling-c/ 
             } catch (const exception& e) {
                 cerr << "Error adding person: " << e.what() << endl;
             }
         } 
-        else if (choice == 3) { // LOOKUP PERSON
+        else if (choice == 4) { // LOOKUP PERSON
             if (a_map.empty()) {
                 cout << "No dataset loaded. Please load a dataset first." << endl;
                 continue;
             }
             lookup_person(a_map);
         } 
-        else if (choice == 4) { // VIEW PERSON INFO
+        else if (choice == 5) { // VIEW PERSON INFO
             if (a_map.empty()) {
                 cout << "No dataset loaded. Please load a dataset first." << endl;
                 continue;
             }
             view_person_info(a_map);
         } 
-        else if (choice == 5) { // EXIT
+        else if (choice == 6) { // EXIT
             cout << "Exiting program..." << endl;
             listening = false;
         } 

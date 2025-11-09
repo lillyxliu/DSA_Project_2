@@ -11,7 +11,7 @@ Graph::Node::Node(const Graph::Node& other){
     id = other.id;
     neighbors = other.neighbors;
 }
-} 
+
 Graph::Node& Graph::Node::operator=(const Graph::Node& other) {
     if (this != &other) {
         id = other.id;

@@ -14,6 +14,25 @@ void quick_sort(vector<string>& vector_id, int low, int high, Person& source_p, 
     }
 }
 
+int partition_pairs(vector<pair<string,float>>& vec, int low, int high) {
+    float pivot_value = vec[low].second;
+    int up = low;
+    int down = high;
+    while (up < down) {
+        while (up < high && vec[up].second <= pivot_value){
+            up++;
+        }
+        while (vec[down].second > pivot_value){ 
+            down--;
+        }
+        if (up < down){
+            swap(vec[up], vec[down]);
+        }
+    }
+    swap(vec[low], vec[down]);
+    return down;
+}
+
 int partition(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type) {
     string pivot_id = vector_id[low];
     float pivot_value = id_to_value_type(pivot_id, source_p, a_map, type);
@@ -29,4 +48,11 @@ int partition(vector<string>& vector_id, int low, int high, Person& source_p, ma
     }
     swap(vector_id[low], vector_id[down]);
     return down;
+}
+    void quick_sort_pairs(vector<pair<string,float>>& vec, int low, int high) {
+    if (low < high) {
+        int pivot = partition_pairs(vec, low, high);
+        quick_sort_pairs(vec, low, pivot - 1);
+        quick_sort_pairs(vec, pivot + 1, high);
+    }
 }

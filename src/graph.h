@@ -29,9 +29,6 @@ public:
         ~Node();
     };
 
-   
-
-
 public:
     vector<Node> nodes;
     map<string, int> id_to_index; // id is string, int is index in nodes vector

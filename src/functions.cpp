@@ -7,9 +7,8 @@
 #include "dataStructureTwo.h"
 
 // find  most similar people to a target Person
-
-// snake_case refactor for all variable and function names (excluding class/type/macro names)
 vector<pair<string,float>> find_most_similar(Person& target, map<string,Person>& a_map, int k);
+
 
 Person lookup_id_get_obj(string id, map<string,Person>& a_map){  
     return a_map[id];
@@ -87,7 +86,9 @@ void print_loaded_first_names(map<string,Person>& a_map, vector<string>& vector_
     cout << "Printing first names: " << endl;
 }
 
-Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id){
+
+// this build graph but with option to parse in sorting option
+Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id, string sort_option){
     int connections_max = 3;
     Graph calc_graph;
     int count = 0;
@@ -102,12 +103,23 @@ Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id){
             pre_calc_weights[i].push_back({vector_id[j], total_weight});
             pre_calc_weights[j].push_back({vector_id[i], total_weight});
         }
-    heap_sort_generic(pre_calc_weights[i], true);
+
+    if(sort_option == "heap" || sort_option == "Heap"){
+        heap_sort_generic(pre_calc_weights[i], true);
+    }else if(sort_option == "quick" || sort_option == "Heap"){
+        quick_sort_pairs(pre_calc_weights[i], 0, pre_calc_weights[i].size()-1);
+    }else{
+        heap_sort_generic(pre_calc_weights[i],false);
+    }
         for(int c = 0; c < min(connections_max, (int)pre_calc_weights[i].size()); c++){
             calc_graph.add_edge(vector_id[i], pre_calc_weights[i][c].first, pre_calc_weights[i][c].second);
         }
         count++;
-        //cout << count << ", ";
+        cout << "Loaded: ";
+        if ((vector_id.size() >= 10 && count % (vector_id.size() / 10) == 0) || vector_id.size() < 10) {
+            cout << count << "; " ;
+        }
+        cout << endl;
     }
     return calc_graph;
 }
@@ -145,6 +157,8 @@ void lookup_person(map<string,Person>& a_map){
         getline(cin, first_name);
         cout << "Enter last name: ";
         getline(cin, last_name);
+        // https://cplusplus.com/reference/string/string/find_first_not_of/
+        // finds the index of the first character that is not a space, tab, return, or new line
         first_name.erase(0, first_name.find_first_not_of(" \t\r\n"));
         first_name.erase(first_name.find_last_not_of(" \t\r\n") + 1);
         last_name.erase(0, last_name.find_first_not_of(" \t\r\n"));
@@ -172,43 +186,39 @@ void lookup_person(map<string,Person>& a_map){
     }
 }
 
-void add_person_to_graph(const Person& new_p, map<string,Person>& a_map, vector<string>& vector_id, Graph& g, int connections_max){
+void add_person_to_graph(const Person& new_p, map<string,Person>& a_map, vector<string>& vector_id, Graph& g, int connections_max, string sort_option){
     string new_id = new_p.get_id();
+
     if (a_map.find(new_id) == a_map.end()) {
-        a_map.insert({new_id, new_p});
-    }
-    if (vector_id.empty()){
-        vector_id.push_back(new_id);
+        a_map[new_id] = new_p;
         g.add_node(new_id);
-        return;
+        vector_id.push_back(new_id);
     }
-    using Pair = pair<float, string>;
-    auto cmp = [](const Pair &a, const Pair &b){ return a.first < b.first; };
-    priority_queue<Pair, vector<Pair>, decltype(cmp)> pq(cmp);
-    for (const string &existing_id : vector_id) {
-        Person &existing = a_map[existing_id];
-        float weight_personality = existing.calc_pers_dif(new_p)/4.0f;
-        float weight_physical = existing.calc_physical_dif(new_p)/4.0f;
-        float total_weight = (weight_personality * 0.8f + weight_physical * 0.2f);
-        if ((int)pq.size() < connections_max) {
-            pq.push({total_weight, existing_id});
-        } else if (total_weight < pq.top().first) {
-            pq.pop();
-            pq.push({total_weight, existing_id});
+    
+    vector<pair<string,float>> weights;
+    for(const string& existing_id: vector_id){
+        if(existing_id == new_id){
+            continue; // skip newly added id
         }
+        Person& existing = a_map[existing_id];
+        float w = existing.calc_pers_dif(new_p)/4.0f * 0.8f +
+                  existing.calc_physical_dif(new_p)/4.0f * 0.2f;
+        weights.push_back({existing_id,w});
     }
-    g.add_node(new_id);
-    vector_id.push_back(new_id);
-    vector<Pair> neighbors;
-    while (!pq.empty()) {
-        neighbors.push_back(pq.top()); pq.pop();
+    
+    if(sort_option == "heap"){
+        heap_sort_generic(weights,false);
+    }else if(sort_option == "quick"){
+        quick_sort_pairs(weights, 0, weights.size()-1);
+    }else{
+        heap_sort_generic(weights,false);
     }
-    reverse(neighbors.begin(), neighbors.end());
-    for (const auto &pr : neighbors) {
-        float w = pr.first;
-        const string &other_id = pr.second;
-        g.add_edge(new_id, other_id, w);
-        g.add_edge(other_id, new_id, w);
+    
+    int n = min(connections_max, (int)weights.size());
+    for(int i =0; i<n; i++){
+        string other_id = weights[i].first;
+        float w = weights[i].second;
+        g.add_edge(new_id,other_id,w); // directed graph
     }
 }
 
@@ -239,6 +249,7 @@ void view_person_info(map<string,Person>& a_map) {
     cin >> id;
     auto it = a_map.find(id);
     if (it != a_map.end()) {
+        cout << "\nREFERENCE PERSON:" << endl;
         display_person_info(it->second);
         int k = 3;
         vector<pair<string,float>> similars = find_most_similar(it->second, a_map, k);
@@ -249,8 +260,10 @@ void view_person_info(map<string,Person>& a_map) {
                 float score = similars[i].second;
                 auto it2 = a_map.find(other_id);
                 if (it2 != a_map.end()){
-                    cout << i+1 << ". " << it2->second.get_first_name() << " " << it2->second.get_last_name()
+                    cout << "\n" << i+1 << ". " << it2->second.get_first_name() << " " << it2->second.get_last_name()
                          << " (ID: " << other_id << ") - similarity score: " << score << endl;
+                    cout << "Compared Person's Attributes:" << endl;
+                    display_person_info(it2->second);
                 }
             }
         } else {

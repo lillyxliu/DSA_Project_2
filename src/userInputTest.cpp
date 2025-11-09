@@ -171,7 +171,7 @@ void Questions::get_person_info() {
     string new_id;
     int max_id = 0;
 
-    // Check LargerDataset.csv
+    // Check from largerDataset.csv
     ifstream largeData("../data/LargerDataset.csv");
     if (largeData.is_open()) {
         string line;
@@ -187,7 +187,7 @@ void Questions::get_person_info() {
         largeData.close();
     }
 
-    // Check dataset.csv
+    // Check from dataset.csv
     ifstream smallData("../data/dataset.csv");
     if (smallData.is_open()) {
         string line;
@@ -220,7 +220,21 @@ void Questions::get_person_info() {
 }
 
 Person Questions::get_user_person() const {
-    return user;
+    Person p;
+    p.set_first_name(first_name);
+    p.set_last_name(last_name);
+    p.set_id(user_id);
+    p.set_social_s((float)social_score / 20.0f + 0.5f); // assuming -10 to +10 scale
+    p.set_process_s((float)processing_score / 20.0f + 0.5f);
+    p.set_decision_s((float)decision_score / 20.0f + 0.5f);
+    p.set_tactics((float)tactics_score / 20.0f + 0.5f);
+    // Set physical traits from global user (which is updated in ask_physical_questions)
+    p.set_height_s(user.get_height_s());
+    p.set_eye_s(user.get_eye_s());
+    p.set_hair_s(user.get_hair_s());
+    p.set_gender_s(user.get_gender_s());
+    p.set_skin_s(user.get_skin_s());
+    return p;
 }
 
 bool Questions::lookup_person(const string& search_id, const string& search_first_name, const string& search_last_name) {
@@ -315,24 +329,10 @@ void Questions::get_physical_values() {
                 string label = string(1, current_label) + ")";
                 size_t start = options.find(label);
                 if (start == string::npos) break;
-<<<<<<< HEAD
                 size_t next = options.find(" " + string(1, current_label + 1) + ")", start + 2);
                 string choice = (next == string::npos)
                     ? options.substr(start + 2)
                     : options.substr(start + 2, next - (start + 2));
-=======
-
-
-                size_t next = options.find(" " + string(1, current_label + 1) + ")");
-                string choice;
-                if (next == string::npos) {
-                    choice = options.substr(start + 2);
-                } else {
-                    choice = options.substr(start + 2, next - (start + 2));
-                }
-
-
->>>>>>> 264df5fa7e10e1a82c8f0ac67eafe45377eda469
                 pq.options.push_back(choice);
                 current_label++;
             }
@@ -345,7 +345,6 @@ void Questions::get_physical_values() {
 }
 
 
-// Helper function for validating height input in format like 5'9
 
 // string npos from:  https://www.geeksforgeeks.org/cpp/stringnpos-in-c-with-examples/ 
 string get_valid_height() {
@@ -477,9 +476,6 @@ void Questions::ask_physical_questions() {
     }
     cout << "----------------------------------------" << endl;
     cout << "End of Physical Test" << endl;
-    cout << "DEBUG: stored physicals -> height: " << user.get_height_s()
-        << ", eyes: " << user.get_eye_s() << ", hair: " << user.get_hair_s()
-        << ", gender: " << user.get_gender_s() << ", skin: " << user.get_skin_s() << endl;
 }
 
 
@@ -495,6 +491,9 @@ double Questions::convert_physical_scale(const string& question_type, char lette
     } 
     else if (question_type == "race") {
         num_options = 6; // a-f
+    }
+    else if (question_type == "hair") {
+        num_options = 8; // a-h
     } 
     else {
         return -1.0; // unknown question type

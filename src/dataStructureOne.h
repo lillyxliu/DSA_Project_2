@@ -7,7 +7,6 @@ using namespace std;
 #include "person.h"
 #pragma once
 
-//#include "main.cpp"
 
 
 void heapify(vector<string>& vector_id, Person& p_source, int n, int i , map<string,Person>& a_map, int type);

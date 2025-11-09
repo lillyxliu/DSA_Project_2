@@ -17,7 +17,6 @@ using namespace std::chrono;
 using namespace std;
 
 
-// snake_case refactor for all variable and function names (excluding class/type/macro names)
 Person lookup_id_get_obj(string id, map<string,Person>& a_map);
 float id_to_value_physical(string& id, Person& p_source,  map<string,Person>& a_map);
 float id_to_value_personality(string& id, Person& p_source,  map<string,Person>& a_map);
@@ -32,10 +31,11 @@ auto measure_time(T funct){
 }
 void measure_sorting_algos(map<string,Person>& a_map, vector<string>& vector_id, Person& source_p);
 void print_loaded_first_names(map<string,Person>& a_map, vector<string>& vector_id);
-Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id);
+Graph build_graph(map<string,Person>& a_map, vector<string>& vector_id, string sort_option = "heap");
 void display_person_info(const Person& p);
 void lookup_person(map<string,Person>& a_map);
 void view_person_info(map<string,Person>& a_map);
-void add_person_to_graph(const Person& new_p, map<string,Person>& a_map, vector<string>& vector_id, Graph& g, int connections_max = 3);
+void add_person_to_graph(const Person& new_p, map<string,Person>& a_map, vector<string>& vector_id, Graph& g, int connections_max, string sort_option = "heap");
+
 
 #endif 

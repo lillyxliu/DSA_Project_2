@@ -10,5 +10,7 @@ using namespace std;
 
 void quick_sort(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type);
 int partition(vector<string>& vector_id, int low, int high, Person& source_p, map<string, Person>& a_map, int type);
+int partition_pairs(vector<pair<string,float>>& vec, int low, int high);
+void quick_sort_pairs(vector<pair<string,float>>& vec, int low, int high);
 
 #endif 
